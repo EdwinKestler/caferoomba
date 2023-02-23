@@ -1,13 +1,14 @@
-"""_summary_; this creates a flask application on port 5000 serves index.html with the intention of controlling some servos as described, forward,backward, left, rigt, and stop
+"""_summary_; this is the hellorover.py file: this creates a flask application on port 5000 serves index.html with the intention of controlling some servos as described, forward,backward, left, rigt, and stop; images dont load and i get the masswage  "GET /forward HTTP/1.1" 404 - when clicking on alt link
 """
 from flask import Flask, render_template, request
+import threading
 import time
 import RPi.GPIO as GPIO
 
 pin1 = 32 # Pin de pwm del motor 1
 pin2 = 33 # Pin de pwm del motor 2
 
-class Motores:
+class servos:
     def __init__(self, pin1, pin2):
         self.pin1 = pin1
         self.pin2 = pin2
@@ -22,23 +23,19 @@ class Motores:
         self.pwm2 = GPIO.PWM(self.pin2, 50)
         self.pwm2.start(7.5)
 
-    def avanzar(self):
+    def forward(self):
         self.pwm.ChangeDutyCycle(2.5)
         self.pwm2.ChangeDutyCycle(12.5)
 
-    def parar(self):
-        self.pwm.ChangeDutyCycle(6.9)
-        self.pwm2.ChangeDutyCycle(6.9)
-
-    def derecha(self):
+    def right(self):
         self.pwm.ChangeDutyCycle(2.5)
         self.pwm2.ChangeDutyCycle(6.9)
 
-    def izquierda(self):
+    def left(self):
         self.pwm.ChangeDutyCycle(6.9)
         self.pwm2.ChangeDutyCycle(12.5)
 
-    def retroceder(self):
+    def backward(self):
         self.pwm.ChangeDutyCycle(12.5)
         self.pwm2.ChangeDutyCycle(2.5)
 
@@ -49,38 +46,29 @@ class Motores:
 
 app = Flask(__name__)
 
-@app.route("/")
-def home():
-    return render_template("index.html")
+robot = servos(pin1, pin2)
 
-@app.route("/forward")
-def avanzar():
-    robot.avanzar()
-    time.sleep(1)
-    robot.parar()
-    return render_template("index.html")
+servo_functions = {
+    "/forward": robot.forward,
+    "/backward": robot.backward,
+    "/right": robot.right,
+    "/left": robot.left
+}
 
-@app.route("/backward")
-def retroceder():
-    robot.retroceder()
-    time.sleep(1)
-    robot.parar()
-    return render_template("index.html")
+def control_servo(servo, duration):
+    servo()
+    time.sleep(duration)
+    servo.stop()
 
-@app.route("/right")
-def derecha():
-    robot.derecha()
-    time.sleep(1)
-    robot.parar()
-    return render_template("index.html")
-
-@app.route("/left")
-def izquierda():
-    robot.izquierda()
-    time.sleep(1)
-    robot.parar()
+@app.route("/", methods=["GET", "POST"])
+def control():
+    if request.method == "POST":
+        url = request.form.get("url")
+        if url in servo_functions:
+            t = threading.Thread(target=control_servo, args=(servo_functions[url], 1))
+            t.start()
     return render_template("index.html")
 
 if __name__ == "__main__":
-    robot = Motores(pin1, pin2)
     app.run(host='0.0.0.0', port=5000, debug=True)
+    
