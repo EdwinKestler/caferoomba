@@ -1,3 +1,5 @@
+"""_summary_; this creates a flask application on port 5000 serves index.html with the intention of controlling some servos as described, forward,backward, left, rigt, and stop
+"""
 from flask import Flask, render_template, request
 import time
 import RPi.GPIO as GPIO
@@ -51,28 +53,28 @@ app = Flask(__name__)
 def home():
     return render_template("index.html")
 
-@app.route("/avanzar")
+@app.route("/forward")
 def avanzar():
     robot.avanzar()
     time.sleep(1)
     robot.parar()
     return render_template("index.html")
 
-@app.route("/retroceder")
+@app.route("/backward")
 def retroceder():
     robot.retroceder()
     time.sleep(1)
     robot.parar()
     return render_template("index.html")
 
-@app.route("/derecha")
+@app.route("/right")
 def derecha():
     robot.derecha()
     time.sleep(1)
     robot.parar()
     return render_template("index.html")
 
-@app.route("/izquierda")
+@app.route("/left")
 def izquierda():
     robot.izquierda()
     time.sleep(1)
@@ -81,4 +83,4 @@ def izquierda():
 
 if __name__ == "__main__":
     robot = Motores(pin1, pin2)
-    app.run(host='192.168.1.41', port=80, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
