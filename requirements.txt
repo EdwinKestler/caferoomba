@@ -1,0 +1,12 @@
+distlib==0.3.6
+filelock==3.9.0
+pbr==5.11.1
+pigpio==1.44
+piServoCtl==1.1.0
+pkg_resources==0.0.0
+platformdirs==3.0.0
+RPi.GPIO==0.7.1
+stevedore==5.0.0
+virtualenv==20.19.0
+virtualenv-clone==0.5.7
+virtualenvwrapper==4.8.4
