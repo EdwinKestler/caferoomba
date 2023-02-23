@@ -1,4 +1,5 @@
-
+"""_summary_: This code allows you to move a robert robot forward, sideways and backwards.;this runs on a rapsberry pi with no desktop enviroment use a web browser for the gui
+"""
 import time
 import RPi.GPIO as GPIO
 
