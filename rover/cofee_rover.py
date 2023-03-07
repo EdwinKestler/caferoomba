@@ -10,6 +10,7 @@ def main():
     robot = Robot(left_gpio=19, right_gpio=13)
     
     while True:
+        
         # Read keyboard input
         char = robot.getch()
         
@@ -21,8 +22,8 @@ def main():
             if next_state == "stop":
                 robot.stop()
             else:
-                if robot.state != "stop":
-                    robot.stop()
+                #if robot.state != "stop":
+                    #robot.stop()
                 robot.state = next_state
                 if robot.state == "forward":
                     robot.forward()
@@ -38,7 +39,7 @@ def main():
                     robot.forward_right()
                 elif robot.state == "reverse_left":
                     robot.reverse_left()
-                elif robot.state == "reverse_right":
+                elif robot.state == "wreverse_right":
                     robot.reverse_right()
                 elif robot.state == "left_stop":
                     robot.left_stop()
@@ -46,6 +47,11 @@ def main():
                     robot.right_stop()
         elif char == "z":
             sys.exit()
+        if char == "m":
+            robot.advance_meters(3)
+            robot.turn_degree_left(180)
+            robot.advance_meters(3)
+            robot.turn_degree_rigth(180)
         
 if __name__ == "__main__":
     main()
