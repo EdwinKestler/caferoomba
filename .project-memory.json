@@ -1,0 +1,46 @@
+{
+  "project_slug": "caferoomba",
+  "project_id": "b407f20c-4b10-4fd2-8223-d1e6086a9320",
+  "redis_url_envs": [
+    "CAFEROOMBA_PROJECT_MEMORY_URL"
+  ],
+  "include_patterns": [
+    ".project-memory.json",
+    "README.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".gitignore",
+    "rover/**/*.py",
+    "rover/requirements.txt",
+    "templates/**/*.html",
+    "previous code/**/*.py",
+    "docs/legacy code/**/*.py",
+    "docs/**/*.md",
+    "scripts/**/*.sh",
+    "project_memory/**/*.py",
+    "project_memory/**/*.md",
+    "project_memory/schemas/**/*.json",
+    ".agents/skills/**/SKILL.md",
+    ".grok/skills/**/SKILL.md"
+  ],
+  "exclude_directories": [
+    ".caferoomba",
+    ".venv",
+    "node_modules",
+    "videos",
+    "pictures"
+  ],
+  "exclude_paths": [
+    "project_memory/evaluation/v25.json"
+  ],
+  "include_project_memory": true,
+  "cache_mode": "on",
+  "content_scan_allowlist_sha256": [],
+  "evaluation_fixture": "project_memory/evaluation/v25.json",
+  "evaluation_fixture_sha256": "d98f09635c816f184aec283cde3197a9b12266f36547d39cb7f56982e2971941",
+  "redis_socket_path": ".caferoomba/project-memory/redis.sock",
+  "durable_ledger_path": ".caferoomba/project-memory/memory-v25.sqlite3",
+  "semantic_provider": {
+    "mode": "disabled"
+  }
+}

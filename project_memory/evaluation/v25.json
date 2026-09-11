@@ -1,0 +1,223 @@
+{
+  "schema": "project-memory:evaluation:v1",
+  "frozen": true,
+  "description": "CafeRoomba Project Memory v2.5 deterministic retrieval acceptance set. This file is excluded from the indexed corpus.",
+  "cases": [
+    {
+      "id": "readme-purpose",
+      "mode": "search",
+      "query": "una barredora de cafe autonoma",
+      "expected_paths": ["README.md"],
+      "forbidden_paths": ["project_memory/evaluation/v25.json"],
+      "limit": 5,
+      "critical": true
+    },
+    {
+      "id": "robot-forward-ramp",
+      "mode": "search",
+      "query": "Gradually increase speed to FORWARD_TARGET_SPEED",
+      "expected_paths": ["rover/robot.py"],
+      "forbidden_paths": ["project_memory/evaluation/v25.json"],
+      "limit": 5,
+      "critical": true
+    },
+    {
+      "id": "robot-wheel-constants",
+      "mode": "search",
+      "query": "change constants if change wheel size",
+      "expected_paths": ["rover/robot.py"],
+      "forbidden_paths": ["project_memory/evaluation/v25.json"],
+      "limit": 5,
+      "critical": true
+    },
+    {
+      "id": "robot-turn-right-typo",
+      "mode": "search",
+      "query": "turn_degree_rigth",
+      "expected_paths": ["rover/robot.py"],
+      "forbidden_paths": ["project_memory/evaluation/v25.json"],
+      "limit": 5,
+      "critical": true
+    },
+    {
+      "id": "robot-already-left",
+      "mode": "search",
+      "query": "Already turning left",
+      "expected_paths": ["rover/robot.py"],
+      "forbidden_paths": ["project_memory/evaluation/v25.json"],
+      "limit": 5,
+      "critical": true
+    },
+    {
+      "id": "servo-hardware-pwm",
+      "mode": "search",
+      "query": "hardware_PWM",
+      "expected_paths": ["rover/servo.py"],
+      "forbidden_paths": ["project_memory/evaluation/v25.json"],
+      "limit": 5,
+      "critical": true
+    },
+    {
+      "id": "servo-frequency-bound",
+      "mode": "search",
+      "query": "The value of the argument frequency is too large",
+      "expected_paths": ["rover/servo.py"],
+      "forbidden_paths": ["project_memory/evaluation/v25.json"],
+      "limit": 5,
+      "critical": true
+    },
+    {
+      "id": "drive-direction-range",
+      "mode": "search",
+      "query": "The value of the argument direction is out of range",
+      "expected_paths": ["rover/drive.py"],
+      "forbidden_paths": ["project_memory/evaluation/v25.json"],
+      "limit": 5,
+      "critical": true
+    },
+    {
+      "id": "drive-steering-not-started",
+      "mode": "search",
+      "query": "The function steering or start is not being executed",
+      "expected_paths": ["rover/drive.py"],
+      "forbidden_paths": ["project_memory/evaluation/v25.json"],
+      "limit": 5,
+      "critical": true
+    },
+    {
+      "id": "template-controller-title",
+      "mode": "search",
+      "query": "Robert Robot Controller",
+      "expected_paths": ["templates/index.html"],
+      "forbidden_paths": ["project_memory/evaluation/v25.json"],
+      "limit": 5,
+      "critical": true
+    },
+    {
+      "id": "coffee-rover-module",
+      "mode": "search",
+      "query": "this is the continuous_rover.py",
+      "expected_paths": ["rover/cofee_rover.py"],
+      "forbidden_paths": ["project_memory/evaluation/v25.json"],
+      "limit": 5,
+      "critical": true
+    },
+    {
+      "id": "coffee-typo-state",
+      "mode": "search",
+      "query": "wreverse_right",
+      "expected_paths": ["rover/cofee_rover.py"],
+      "forbidden_paths": ["project_memory/evaluation/v25.json"],
+      "limit": 5,
+      "critical": false
+    },
+    {
+      "id": "continuous-drive-comment",
+      "mode": "search",
+      "query": "this is the continuous_drive.py",
+      "expected_paths": ["rover/continuous_drive.py"],
+      "forbidden_paths": ["project_memory/evaluation/v25.json"],
+      "limit": 5,
+      "critical": true
+    },
+    {
+      "id": "continuous-xdrive",
+      "mode": "search",
+      "query": "xdrive.stop",
+      "expected_paths": ["rover/continuous_drive.py"],
+      "forbidden_paths": ["project_memory/evaluation/v25.json"],
+      "limit": 5,
+      "critical": false
+    },
+    {
+      "id": "robot-drive-drive-object",
+      "mode": "search",
+      "query": "self.drive = Drive(left_gpio, right_gpio",
+      "expected_paths": ["rover/robot_drive.py"],
+      "forbidden_paths": ["project_memory/evaluation/v25.json"],
+      "limit": 5,
+      "critical": true
+    },
+    {
+      "id": "requirements-piservo",
+      "mode": "search",
+      "query": "piServoCtl==1.1.0",
+      "expected_paths": ["rover/requirements.txt"],
+      "forbidden_paths": ["project_memory/evaluation/v25.json"],
+      "limit": 5,
+      "critical": true
+    },
+    {
+      "id": "legacy-flask-404",
+      "mode": "search",
+      "query": "GET /forward HTTP/1.1",
+      "expected_paths": ["previous code/hellorover.py"],
+      "forbidden_paths": ["project_memory/evaluation/v25.json"],
+      "limit": 5,
+      "critical": false
+    },
+    {
+      "id": "legacy-pwm-pin",
+      "mode": "search",
+      "query": "Pin de pwm del motor 1",
+      "expected_paths": ["previous code/hellorover.py"],
+      "forbidden_paths": ["project_memory/evaluation/v25.json"],
+      "limit": 5,
+      "critical": false
+    },
+    {
+      "id": "memory-bundle-version",
+      "mode": "search",
+      "query": "Portable Project Memory v2.5.0 bundle",
+      "expected_paths": ["project_memory/README.md"],
+      "forbidden_paths": ["project_memory/evaluation/v25.json"],
+      "limit": 5,
+      "critical": true
+    },
+    {
+      "id": "symbol-advance-meters",
+      "mode": "symbols",
+      "query": "advance_meters",
+      "expected_paths": ["rover/robot.py"],
+      "forbidden_paths": ["project_memory/evaluation/v25.json"],
+      "limit": 5,
+      "critical": true
+    },
+    {
+      "id": "symbol-transition-speed",
+      "mode": "symbols",
+      "query": "transition_speed",
+      "expected_paths": ["rover/robot.py"],
+      "forbidden_paths": ["project_memory/evaluation/v25.json"],
+      "limit": 5,
+      "critical": true
+    },
+    {
+      "id": "symbol-smooth-stop",
+      "mode": "symbols",
+      "query": "smooth_stop",
+      "expected_paths": ["rover/robot.py"],
+      "forbidden_paths": ["project_memory/evaluation/v25.json"],
+      "limit": 5,
+      "critical": true
+    },
+    {
+      "id": "symbol-steering",
+      "mode": "symbols",
+      "query": "steering",
+      "expected_paths": ["rover/drive.py"],
+      "forbidden_paths": ["project_memory/evaluation/v25.json"],
+      "limit": 5,
+      "critical": true
+    },
+    {
+      "id": "symbol-servo-write",
+      "mode": "symbols",
+      "query": "Servo.write",
+      "expected_paths": ["rover/servo.py"],
+      "forbidden_paths": ["project_memory/evaluation/v25.json"],
+      "limit": 5,
+      "critical": false
+    }
+  ]
+}

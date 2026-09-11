@@ -1,18 +1,19 @@
-# Ignore common image files
-*.png
-*.jpeg
-*.gif
-*.bmp
-*.svg
-*.webp
-*.ico
-*.tif
-*.tiff
-*.avif
-*.heic
-*.heif
+# Local environment
+.venv/
+__pycache__/
+*.py[cod]
+*.py.save
+.pytest_cache/
+.ruff_cache/
+*.log
 
-# Ignore common video files
+# Project Memory v2.5 local state (Redis dump, SQLite ledger, packs, keys)
+.caferoomba/
+*.pmem
+*.key
+
+# Videos — local recordings are hundreds of MB to >1 GB
+/docs/videos/
 *.mp4
 *.mov
 *.avi
@@ -25,3 +26,12 @@
 *.mpg
 *.3gp
 *.3g2
+
+# Pictures — camera photos are >2 MB; video frames add ~30 MB together.
+# Small UI icons in static/ stay tracked.
+/docs/pictures/
+
+# Large office / slicer binaries
+*.pptx
+*.ppt
+*.gcode
