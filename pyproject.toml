@@ -55,6 +55,7 @@ pythonpath = ["src", "."]
 addopts = "-q"
 markers = [
   "slow: optional longer CPU checks",
+  "hardware: needs RealSense, Cube, or Orin CSI",
 ]
 
 [tool.ruff]

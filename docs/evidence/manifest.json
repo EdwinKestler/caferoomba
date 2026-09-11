@@ -9,6 +9,22 @@
       "is_synthetic": true,
       "command": "pytest tests && python -m caferoomba demo-fixture",
       "not_claimed": ["cosmos_inference", "colab_enterprise", "jetson", "autonomous_robot"]
+    },
+    {
+      "id": "gcs-private-media",
+      "evidence_state": "tested_cloud",
+      "is_synthetic": false,
+      "command": "./scripts/gcs_sync_ignored_media.sh",
+      "bucket": "gs://caferoomba/media/",
+      "not_claimed": ["cosmos_inference", "colab_enterprise", "public_dataset", "autonomous_robot"]
+    },
+    {
+      "id": "api-keys-local-env",
+      "evidence_state": "implemented",
+      "is_synthetic": false,
+      "command": "local .env (gitignored); see .env.example",
+      "keys_present": ["NVIDIA_API_KEY", "X_AI_API_KEY", "GOOGLE_CLOUD_PROJECT", "CAFEROOMBA_GCS_BUCKET"],
+      "not_claimed": ["cosmos_inference", "colab_enterprise"]
     }
   ]
 }

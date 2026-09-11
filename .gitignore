@@ -48,6 +48,10 @@ notebooks/.ipynb_checkpoints/
 artifacts/
 data/generated/
 data/cache/
+# Owner raw FPV/external media and labels (private). Track READMEs only.
+data/raw/**
+!data/raw/**/
+!data/raw/**/README.md
 *.onnx
 *.pt
 *.pth

@@ -6,7 +6,7 @@ GPU”. This repository does **not** claim three pathways or Cosmos fine-tuning.
 | Area | This milestone |
 |---|---|
 | Innovation | Offline teacher / onboard student split; typed intents; fail-closed supervisor |
-| NVIDIA / Google Cloud | CPU PyTorch+ONNX only. Cosmos live and Colab Enterprise **blocked** |
+| NVIDIA / Google Cloud | CPU PyTorch+ONNX tested offline. Keys in local `.env`. Private GCS media at `gs://caferoomba/media/`. Local Cosmos3-Reasoner NIM Docker **blocked** (24 GiB 3090 Ti vs >56 GiB / 48 GiB FP8). Hosted NIM API not called |
 | Usefulness | Software path for bean-patio sweeping; no physical trial |
 | Documentation | Audit, architecture, dataset, model, safety, pending work |
 

@@ -88,3 +88,75 @@ def demo_fixture(
     out = workdir / "manifest.json"
     _write_manifest(out, json.loads(manifest.model_dump_json()))
     typer.echo(json.dumps({"manifest": str(out), "synthetic": True, "ok": True}, indent=2))
+
+
+@app.command()
+def preflight(
+    config: Path = typer.Option(Path("config/companion.yaml"), "--config"),
+    camera: Optional[str] = typer.Option(None, "--camera", help="fake | realsense | imx219"),
+    vehicle: Optional[str] = typer.Option(None, "--vehicle", help="dry-run"),
+) -> None:
+    """Check companion config. Does not open Cube serial or arm."""
+    from caferoomba.app.config import load_config
+    from caferoomba.app.loop import apply_overrides, build_camera, build_vehicle
+
+    cfg = apply_overrides(load_config(config), camera=camera, vehicle=vehicle)
+    payload = {
+        "python": str(Path(__import__("sys").executable)),
+        "camera": cfg.camera.backend,
+        "vehicle": cfg.vehicle.backend,
+        "allow_commands": cfg.vehicle.allow_commands,
+        "fence_required": cfg.fence.required,
+        "onnx": cfg.policy.onnx_path,
+        "ok": True,
+        "camera_open": False,
+    }
+    cam = None
+    try:
+        build_vehicle(cfg)
+        cam = build_camera(cfg)
+        cam.open()
+        sample = cam.read()
+        payload["camera_open"] = True
+        payload["frame_shape"] = list(sample.color.shape)
+        payload["has_depth"] = sample.depth is not None
+    except Exception as exc:
+        payload["ok"] = False
+        payload["error"] = str(exc)
+        raise typer.Exit(code=1) from None
+    finally:
+        if cam is not None:
+            try:
+                cam.close()
+            except Exception:
+                pass
+        typer.echo(json.dumps(payload, indent=2))
+
+
+@app.command("run-companion")
+def run_companion(
+    config: Path = typer.Option(Path("config/companion.yaml"), "--config"),
+    camera: Optional[str] = typer.Option(None, "--camera"),
+    vehicle: Optional[str] = typer.Option(None, "--vehicle"),
+    cycles: int = typer.Option(12, "--cycles"),
+) -> None:
+    """Mission loop. Default dry-run. Never arms. Not Jetson evidence."""
+    from caferoomba.app.config import load_config
+    from caferoomba.app.loop import CompanionLoop, apply_overrides
+
+    cfg = apply_overrides(load_config(config), camera=camera, vehicle=vehicle)
+    rows = CompanionLoop(cfg).run(cycles=cycles)
+    typer.echo(
+        json.dumps(
+            {
+                "cycles": len(rows),
+                "final_state": rows[-1]["state"] if rows else None,
+                "states": [row["state"] for row in rows],
+                "armed": False,
+                "vehicle": cfg.vehicle.backend,
+                "camera": cfg.camera.backend,
+                "ok": True,
+            },
+            indent=2,
+        )
+    )

@@ -32,6 +32,16 @@ Do not grant blanket `/hooks-trust` unless Edwin does so.
 
 Cleanup: delete `.grok/config.toml` `[mcp_servers.xai-docs]` or `grok mcp remove --scope project xai-docs`.
 
+## Secrets and cloud
+
+API keys live only in local `.env` (gitignored): `NVIDIA_API_KEY`,
+`X_AI_API_KEY` / `XAI_API_KEY`, `GOOGLE_CLOUD_PROJECT`,
+`CAFEROOMBA_GCS_BUCKET`. See `.env.example`. Do not print or commit values.
+
+Gitignored large media is stored privately at `gs://caferoomba/media/` —
+`docs/GCS_MEDIA.md`. Live Cosmos / Colab jobs still need an explicit budget
+before they count as challenge inference/training evidence.
+
 ## Local Python
 
 Isolated `.venv-dev` (Python 3.11). Do not install `rover/requirements.txt`.

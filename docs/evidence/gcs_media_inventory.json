@@ -1,0 +1,37 @@
+{
+  "schema": "caferoomba.gcs_inventory.v1",
+  "bucket": "gs://caferoomba/media/",
+  "project": "flatbox-serverless-demos",
+  "synced_at": "2026-09-11T15:44:22Z",
+  "object_count": 289,
+  "total_bytes": 5220588469,
+  "total_gib": 4.862,
+  "prefixes": {
+    "data/raw": {
+      "objects": 40,
+      "bytes": 500089082
+    },
+    "docs/DesginSTL": {
+      "objects": 2,
+      "bytes": 4198142
+    },
+    "docs/docs": {
+      "objects": 10,
+      "bytes": 113185088
+    },
+    "docs/pictures": {
+      "objects": 89,
+      "bytes": 112970587
+    },
+    "docs/videos": {
+      "objects": 148,
+      "bytes": 4490145570
+    }
+  },
+  "public": false,
+  "not_claimed": [
+    "cosmos_inference",
+    "colab_enterprise",
+    "public_dataset"
+  ]
+}

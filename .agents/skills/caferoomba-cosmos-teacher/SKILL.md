@@ -12,7 +12,10 @@ Requested model id: `nvidia/cosmos3-nano-reasoner`. The student must not call th
 ```
 
 - `backend=mock` always sets `is_mock: true`.
-- `backend=live` requires `COSMOS_TEACHER_URL` and `NVIDIA_API_KEY` and is blocked while spending is zero.
+- `backend=live` requires `COSMOS_TEACHER_URL` and `NVIDIA_API_KEY`.
+- Local Docker NIM (`nvcr.io/nim/nvidia/cosmos3-reasoner`) is blocked on this
+  24 GiB 3090 Ti; run `./scripts/cosmos_nim_preflight.sh` first. Docs:
+  `docs/DEPLOYMENT_COSMOS_NIM.md`.
 - Cache key is model + prompt hash + input hash.
 
 Docs: `docs/DATASET.md`, `docs/MODEL_CARD.md`.

@@ -1,0 +1,20 @@
+# PR1 companion defaults. Dry-run only: no Cube, no arming, fake camera.
+camera:
+  backend: fake
+  width: 64
+  height: 64
+  frame_count: 8
+vehicle:
+  backend: dry-run
+  device: /dev/ttyACM0
+  baud: 19200
+  allow_commands: false
+fence:
+  required: false
+  kml_path: null
+policy:
+  onnx_path: null
+  ttl_ms: 250
+loop:
+  hz: 20
+  max_observation_age_ms: 300
