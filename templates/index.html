@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Robert Robot Controller</title>
+</head>
+<body>
+    <h1>Robert Robot Controller</h1>
+    <form method="POST">
+        <button type="submit" name="url" value="/forward"><img src="{{url_for('static', filename='forward-arrow.png')}}" alt="forward" width="50"></button>
+        <br>
+        <button type="submit" name="url" value="/left"><img src="{{url_for('static', filename='left-arrow.png')}}" alt="left" width="50"></button>
+        <button type="submit" name="url" value="/stop"><img src="{{url_for('static', filename='stop-arrow.png')}}" alt="stop" width="50"></button>
+        <button type="submit" name="url" value="/right"><img src="{{url_for('static', filename='right-arrow.png')}}" alt="right" width="50"></button>
+        <br>
+        <button type="submit" name="url" value="/backward"><img src="{{url_for('static', filename='backward-arrow.png')}}" alt="backward" width="50"></button>
+    </form>
+</body>
+</html>
