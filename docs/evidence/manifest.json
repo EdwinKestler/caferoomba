@@ -1,0 +1,14 @@
+{
+  "schema": "caferoomba.evidence.v1",
+  "commit_at_start": "63cedd05c7b8fec80ff9ad05668196df20443c7a",
+  "branch": "feature/cpu-offline-pipeline",
+  "claims": [
+    {
+      "id": "cpu-offline-pipeline",
+      "evidence_state": "tested_offline",
+      "is_synthetic": true,
+      "command": "pytest tests && python -m caferoomba demo-fixture",
+      "not_claimed": ["cosmos_inference", "colab_enterprise", "jetson", "autonomous_robot"]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+# Project-scoped MCP. No secret literals.
+# GitHub is reused from the working session integration (read tools already
+# available). Do not add npx @latest. Google Cloud MCP stays omitted until
+# Edwin approves a project/region/budget.
+
+[mcp_servers.xai-docs]
+url = "https://docs.x.ai/api/mcp"
+enabled = true

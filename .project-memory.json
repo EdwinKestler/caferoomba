@@ -10,6 +10,11 @@
     "AGENTS.md",
     "CLAUDE.md",
     ".gitignore",
+    "pyproject.toml",
+    ".env.example",
+    "src/**/*.py",
+    "tests/**/*.py",
+    "scripts/**/*.py",
     "rover/**/*.py",
     "rover/requirements.txt",
     "templates/**/*.html",
@@ -26,9 +31,11 @@
   "exclude_directories": [
     ".caferoomba",
     ".venv",
+    ".venv-dev",
     "node_modules",
     "videos",
-    "pictures"
+    "pictures",
+    "artifacts"
   ],
   "exclude_paths": [
     "project_memory/evaluation/v25.json"

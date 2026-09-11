@@ -1,0 +1,46 @@
+"""Serviced patches with spatial tolerance. Exact GPS equality is not required."""
+
+from __future__ import annotations
+
+import json
+import math
+from dataclasses import asdict, dataclass
+from pathlib import Path
+
+
+@dataclass
+class PatchVisit:
+    patch_id: str
+    x_m: float
+    y_m: float
+    visited_at_s: float
+
+
+class PatchStore:
+    def __init__(self, path: Path, *, radius_m: float = 2.0) -> None:
+        self.path = path
+        self.radius_m = radius_m
+        self.visits: list[PatchVisit] = []
+        if path.is_file():
+            raw = json.loads(path.read_text(encoding="utf-8"))
+            self.visits = [PatchVisit(**row) for row in raw]
+
+    def _distance(self, x: float, y: float, other: PatchVisit) -> float:
+        return math.hypot(x - other.x_m, y - other.y_m)
+
+    def seen(self, x: float, y: float) -> PatchVisit | None:
+        for visit in self.visits:
+            if self._distance(x, y, visit) <= self.radius_m:
+                return visit
+        return None
+
+    def record(self, patch_id: str, x: float, y: float, visited_at_s: float) -> PatchVisit:
+        existing = self.seen(x, y)
+        if existing:
+            return existing
+        visit = PatchVisit(patch_id=patch_id, x_m=x, y_m=y, visited_at_s=visited_at_s)
+        self.visits.append(visit)
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        payload = json.dumps([asdict(item) for item in self.visits], indent=2)
+        self.path.write_text(payload, encoding="utf-8")
+        return visit

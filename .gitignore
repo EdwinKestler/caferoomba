@@ -1,11 +1,19 @@
 # Local environment
 .venv/
+.venv-dev/
+.env
 __pycache__/
 *.py[cod]
 *.py.save
 .pytest_cache/
 .ruff_cache/
+.mypy_cache/
+*.egg-info/
+.coverage
+htmlcov/
+coverage.xml
 *.log
+notebooks/.ipynb_checkpoints/
 
 # Project Memory v2.5 local state (Redis dump, SQLite ledger, packs, keys)
 .caferoomba/
@@ -35,3 +43,16 @@ __pycache__/
 *.pptx
 *.ppt
 *.gcode
+
+# Generated learning artifacts (keep fixtures tracked)
+artifacts/
+data/generated/
+data/cache/
+*.onnx
+*.pt
+*.pth
+*.engine
+
+# Allow tiny synthetic clips used by offline tests
+!fixtures/synthetic/
+!fixtures/synthetic/**
