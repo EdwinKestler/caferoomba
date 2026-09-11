@@ -160,3 +160,54 @@ def run_companion(
             indent=2,
         )
     )
+
+
+def _load_script(name: str):
+    import importlib.util
+
+    spec_path = Path(__file__).resolve().parents[2] / "scripts" / f"{name}.py"
+    spec = importlib.util.spec_from_file_location(name, spec_path)
+    mod = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(mod)
+    return mod
+
+
+@app.command("capture-realsense")
+def capture_realsense(
+    out: Path = typer.Option(Path("artifacts/hw-capture"), "--out"),
+) -> None:
+    """Save one RealSense color/depth still. Does not talk to the Cube."""
+    report = _load_script("capture_realsense").capture(out)
+    typer.echo(json.dumps(report, indent=2))
+
+
+@app.command("capture-cube")
+def capture_cube(
+    device: str = typer.Option(
+        "/dev/serial/by-id/usb-Hex_ProfiCNC_CubeOrange_280044000C51393239383638-if00",
+        "--device",
+    ),
+    baud: int = typer.Option(115200, "--baud"),
+    seconds: float = typer.Option(5.0, "--seconds"),
+    out: Path = typer.Option(Path("artifacts/hw-capture"), "--out"),
+) -> None:
+    """Read-only MAVLink listen. Never arms or changes mode."""
+    mod = _load_script("capture_cube")
+    try:
+        report = mod.capture(device=device, baud=baud, seconds=seconds, out_dir=out)
+    except PermissionError:
+        typer.echo(
+            json.dumps(
+                {
+                    "ok": False,
+                    "error": "permission denied opening Cube USB CDC",
+                    "device": device,
+                    "hint": "sudo usermod -aG dialout $USER  (then log out/in)",
+                    "arm_attempted": False,
+                },
+                indent=2,
+            )
+        )
+        raise typer.Exit(code=2) from None
+    typer.echo(json.dumps(report, indent=2))

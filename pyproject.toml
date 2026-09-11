@@ -41,6 +41,7 @@ cloud = [
 ]
 autopilot = [
   "pymavlink>=2.4",
+  "pyserial>=3.5",
 ]
 
 [project.scripts]

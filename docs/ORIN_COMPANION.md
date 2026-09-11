@@ -18,4 +18,13 @@ Install the package into the runtime venv (`.venv`), not only `.venv-dev`:
 FSM: `OFF → PRECHECK → HOLD → SWEEP ⇄ TURN → RETURN → IDLE` plus `FAULT`/`ESTOP`.
 HOLD/FAULT/ESTOP command zero velocity. Software never calls `arm()`.
 
-PR2 adds KML geofence. PR3 RealSense. PR4 MAVSDK. PR5 IMX219 CSI.
+Hardware sniffers on this host (USB RealSense D415 + Cube Orange). Never arm:
+
+```bash
+.venv/bin/python scripts/capture_realsense.py
+.venv/bin/python scripts/capture_cube.py --seconds 5
+```
+
+Cube USB is `dialout`. If open fails: `sudo usermod -aG dialout $USER` then log out/in.
+
+PR2 adds KML geofence. PR4 MAVSDK command path. PR5 IMX219 CSI.
