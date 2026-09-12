@@ -70,6 +70,7 @@ class MavsdkTelemetryVehicle(DryRunVehicle):
             with self._lock:
                 if kind == "connection":
                     self._state.heartbeat_ok = bool(value.is_connected)
+                    self._state.heartbeat_t_ms = now
                     if value.is_connected:
                         self._ready.set()
                 elif kind == "position":
@@ -126,7 +127,15 @@ class MavsdkTelemetryVehicle(DryRunVehicle):
         with self._lock:
             state = replace(self._state)
         state.link_error = self._error
-        state.heartbeat_ok = state.heartbeat_ok and self._error is None
+        # SDK connection events are not MAVLink heartbeat measurements. Treat
+        # old status as unknown; use serial-passive for measured heartbeat health.
+        state.heartbeat_ok = (state.heartbeat_ok and self._error is None
+                              and state.heartbeat_t_ms is not None
+                              and 0 <= now - state.heartbeat_t_ms
+                              <= self.config.heartbeat_timeout_ms)
+        state.vehicle_health_ok = False  # No authoritative MAV_STATE stream here.
+        if not state.heartbeat_ok:
+            state.armed = None
         state.gps_ok = (self._gps_fix and self._gps_t_ms is not None and
                         0 <= now - self._gps_t_ms <= self.config.gps_timeout_ms and
                         state.position_t_ms is not None and

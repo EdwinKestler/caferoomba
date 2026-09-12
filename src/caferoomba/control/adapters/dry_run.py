@@ -2,14 +2,16 @@
 
 from __future__ import annotations
 
+from collections import deque
+
 from caferoomba.control.safety import supervise
 from caferoomba.schemas import Intent, SafetyDecision
 
 
 class DryRunAdapter:
     def __init__(self) -> None:
-        self.sent: list[Intent] = []
-        self.decisions: list[SafetyDecision] = []
+        self.sent: deque[Intent] = deque(maxlen=1000)
+        self.decisions: deque[SafetyDecision] = deque(maxlen=1000)
 
     def apply(self, intent: Intent, **safety_kwargs) -> SafetyDecision:
         decision = supervise(intent, **safety_kwargs)

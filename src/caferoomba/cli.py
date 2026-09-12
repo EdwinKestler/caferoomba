@@ -93,8 +93,8 @@ def demo_fixture(
 @app.command()
 def preflight(
     config: Path = typer.Option(Path("config/companion.yaml"), "--config"),
-    camera: Optional[str] = typer.Option(None, "--camera", help="fake | realsense | imx219"),
-    vehicle: Optional[str] = typer.Option(None, "--vehicle", help="dry-run"),
+    camera: Optional[str] = typer.Option(None, "--camera", help="fake | realsense | usb | imx219"),
+    vehicle: Optional[str] = typer.Option(None, "--vehicle", help="dry-run | serial-passive"),
 ) -> None:
     """Check companion config. Does not open Cube serial or arm."""
     from caferoomba.app.config import load_config
@@ -138,28 +138,44 @@ def run_companion(
     config: Path = typer.Option(Path("config/companion.yaml"), "--config"),
     camera: Optional[str] = typer.Option(None, "--camera"),
     vehicle: Optional[str] = typer.Option(None, "--vehicle"),
+    camera_device: Optional[str] = typer.Option(None, "--camera-device"),
+    vehicle_device: Optional[str] = typer.Option(None, "--vehicle-device"),
+    policy_path: Optional[str] = typer.Option(None, "--policy"),
+    record_dir: Optional[str] = typer.Option(None, "--record-dir"),
     cycles: int = typer.Option(12, "--cycles"),
 ) -> None:
     """Mission loop. Default dry-run. Never arms. Not Jetson evidence."""
     from caferoomba.app.config import load_config
     from caferoomba.app.loop import CompanionLoop, apply_overrides
 
-    cfg = apply_overrides(load_config(config), camera=camera, vehicle=vehicle)
-    rows = CompanionLoop(cfg).run(cycles=cycles)
+    cfg = apply_overrides(load_config(config), camera=camera, vehicle=vehicle,
+                          camera_device=camera_device, vehicle_device=vehicle_device,
+                          policy_path=policy_path, record_dir=record_dir)
+    runtime = CompanionLoop(cfg)
+    rows = runtime.run(cycles=cycles)
+    healthy = bool(rows) and all(row["state"] not in {"FAULT", "ESTOP"} for row in rows)
     typer.echo(
         json.dumps(
             {
-                "cycles": len(rows),
+                "cycles": runtime.total_cycles,
+                "retained_cycles": len(rows),
                 "final_state": rows[-1]["state"] if rows else None,
                 "states": [row["state"] for row in rows],
-                "armed": False,
+                "armed_observed": rows[-1]["telemetry"]["armed"] if rows else None,
+                "simulation": runtime.simulation,
+                "shadow_only": True,
+                "commands_sent": 0,
+                "reasons": rows[-1]["reasons"] if rows else [],
+                "recording": str(runtime.recorder.path) if runtime.recorder else None,
                 "vehicle": cfg.vehicle.backend,
                 "camera": cfg.camera.backend,
-                "ok": True,
+                "ok": healthy,
             },
             indent=2,
         )
     )
+    if not healthy:
+        raise typer.Exit(code=1)
 
 
 def _load_script(name: str):

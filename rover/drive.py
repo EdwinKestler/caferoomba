@@ -1,3 +1,5 @@
+raise RuntimeError("Legacy GPIO drive disabled; use python -m caferoomba run-companion")
+
 from servo import Servo
 
 class Drive:

@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import math
 import time
+from collections import deque
 from dataclasses import asdict
 from pathlib import Path
 
@@ -42,7 +43,9 @@ class CompanionLoop:
         self.fence = Fence(required=f.required, kml_path=f.kml_path, region_name=f.region_name,
                            exclusion_names=f.exclusion_names, clearance_m=f.clearance_m,
                            member=f.kmz_member)
-        self.policy = policy or load_policy(config.policy.onnx_path)
+        self.policy = policy or load_policy(
+            config.policy.onnx_path, execution_providers=config.policy.execution_providers
+        )
         c = config.camera
         if c.width != c.height:
             raise ValueError("policy preprocessing currently requires a square target")
@@ -55,9 +58,11 @@ class CompanionLoop:
             if record_dir
             else None
         )
-        self.cycles = []
+        self.cycles = deque(maxlen=config.loop.history_limit)
+        self.total_cycles = 0
         self._last_ms = self._sample = None
         self._started = False
+        self._started_ms = None
         self.simulated_work_s = 0.0
         self.turn_clearance = False
         self.next_pass_aligned = False
@@ -73,8 +78,10 @@ class CompanionLoop:
             self.camera.open()
             self.fsm.step(MissionEvent.SENSORS_OK)
             self._started = True
+            self._started_ms = self.clock()
         except Exception:
             self.fsm.step(MissionEvent.SENSORS_FAIL)
+            self.stop()
             raise
 
     def _stop_intent(self, now):
@@ -82,11 +89,18 @@ class CompanionLoop:
                                   ttl_ms=self.config.policy.ttl_ms, source="hold-zero")
 
     def _fault(self):
+        self.turn.abort()
         if self.fsm.allowed(MissionEvent.FAULT):
             self.fsm.step(MissionEvent.FAULT)
 
     def cycle(self):
+        if not self._started:
+            raise RuntimeError("CompanionLoop.cycle requires start()")
         before = self.clock()
+        if self.fsm.requires_zero_velocity() and self.turn.state not in {
+            TurnState.SWEEP, TurnState.STOP_FAULT
+        }:
+            self.turn.abort()
         sample, prediction, errors = None, None, []
         try:
             sample = self.camera.read()
@@ -107,7 +121,15 @@ class CompanionLoop:
             action, score = ActionLabel.STOP, 0.0
             self._fault()
         now = self.clock()  # Never reuse pre-inference time for freshness/expiry checks.
-        telem = self.vehicle.telemetry()
+        try:
+            telem = self.vehicle.telemetry()
+        except Exception as exc:
+            from caferoomba.vehicle.client import TelemetrySnapshot
+            telem = TelemetrySnapshot(heartbeat_ok=False, link_error=str(exc))
+            errors.append(f"telemetry failed: {type(exc).__name__}: {exc}")
+            self._fault()
+        if not telem.heartbeat_ok or not telem.vehicle_health_ok:
+            self._fault()
         age = self.buffer.observation_age_ms(now)
         ready = self.buffer.ready()
         geofence_ok = self.fence.allows(telem.latitude_deg, telem.longitude_deg)
@@ -147,10 +169,19 @@ class CompanionLoop:
         decision = self.vehicle.send_intent(
             intent, now_ms=now, observation_age_ms=age,
             max_observation_age_ms=self.config.loop.max_observation_age_ms,
-            heartbeat_ok=telem.heartbeat_ok, geofence_ok=geofence_ok,
+            heartbeat_ok=telem.heartbeat_ok, vehicle_health_ok=telem.vehicle_health_ok,
+            geofence_ok=geofence_ok,
+            footprint_clear=self.simulation or self.turn_clearance,
             required_sensor_missing=not ready and not self.fsm.requires_zero_velocity(),
             nan_prediction=bool(errors), operator_stop=self.fsm.state is MissionState.ESTOP)
-        if not decision.allow and ready:
+        acquisition_expired = (
+            self._sample is not None and
+            (age is None or age > self.config.loop.max_observation_age_ms)
+        ) or (
+            self._sample is None and self._started_ms is not None and
+            now - self._started_ms > self.config.loop.max_observation_age_ms
+        )
+        if not decision.allow and (ready or acquisition_expired):
             self._fault()
         if self.simulation and decision.allow and self.fsm.state is MissionState.SWEEP:
             self.simulated_work_s += dt
@@ -164,12 +195,14 @@ class CompanionLoop:
                "observation_age_ms": age, "buffer_ready": ready,
                "telemetry": asdict(telem), "fence": self.fence.metadata(),
                "model_sha256": getattr(self.policy, "model_sha256", None),
+               "execution_providers": getattr(self.policy, "execution_providers", []),
                "camera_frame_id": self._sample.frame_id if self._sample else None,
                "camera_t_ms": self._sample.t_ms if self._sample else None,
                "camera_modality": self._sample.modality if self._sample else None,
                "timestamp_quality": self._sample.timestamp_quality if self._sample else None,
                "camera_is_synthetic": self._sample.is_synthetic if self._sample else None}
         self.cycles.append(row)
+        self.total_cycles += 1
         if self.recorder:
             self.recorder.record(row, sample)
         return row
@@ -188,6 +221,8 @@ class CompanionLoop:
             self.fsm.step(MissionEvent.TURN_DONE)
 
     def stop(self):
+        self._started = False
+        self.turn.abort()
         errors = []
         for resource in (self.camera, self.vehicle):
             try:
@@ -196,9 +231,8 @@ class CompanionLoop:
                 errors.append(str(exc))
         if self.recorder and self.recorder.path.exists():
             self.recorder.close(summary={"state": self.fsm.state.value,
-                                         "cycles": len(self.cycles), "cleanup_errors": errors,
+                                         "cycles": self.total_cycles, "cleanup_errors": errors,
                                          "shadow_only": True, "simulation": self.simulation})
-        self._started = False
         if errors:
             raise RuntimeError("cleanup failed: " + "; ".join(errors))
 
@@ -213,7 +247,7 @@ class CompanionLoop:
                 time.sleep(max(0, 1 / self.config.loop.hz - (time.monotonic() - started)))
         finally:
             self.stop()
-        return self.cycles
+        return list(self.cycles)
 
 
 def run_from_path(config_path: Path | None, *, cycles: int):

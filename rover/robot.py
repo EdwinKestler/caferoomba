@@ -1,3 +1,5 @@
+raise RuntimeError("Legacy GPIO rover disabled; use python -m caferoomba run-companion")
+
 import sys, tty, termios, time, pigpio
 from servo import Servo
 
@@ -236,6 +238,4 @@ class Robot:
         time.sleep(t)
         self.smooth_stop()
         
-        
-            
         

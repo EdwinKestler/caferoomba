@@ -1,3 +1,5 @@
+raise RuntimeError("Legacy GPIO rover disabled; use python -m caferoomba run-companion")
+
 import sys, tty, termios, time, pigpio
 from drive import Drive
 

@@ -6,8 +6,8 @@ camera:
   frame_count: 8
 vehicle:
   backend: dry-run
-  device: /dev/ttyACM0
-  baud: 19200
+  device: null
+  baud: 115200
   allow_commands: false
 fence:
   required: false

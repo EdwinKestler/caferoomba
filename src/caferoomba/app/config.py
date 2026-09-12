@@ -18,7 +18,9 @@ class Frozen(BaseModel):
 
 
 class CameraConfig(Frozen):
-    backend: Literal["fake", "realsense", "imx219"] = "fake"
+    backend: Literal["fake", "realsense", "usb", "imx219"] = "fake"
+    device: str | None = None
+    serial_number: str | None = None
     width: int = Field(default=64, ge=8, le=2048)
     height: int = Field(default=64, ge=8, le=2048)
     frame_count: int = Field(default=8, ge=1, le=64)
@@ -54,6 +56,7 @@ class FenceConfig(Frozen):
 
 class PolicyConfig(Frozen):
     onnx_path: str | None = None
+    execution_providers: tuple[str, ...] = ("CPUExecutionProvider",)
     ttl_ms: int = Field(default=250, ge=10, le=1000)
 
 
@@ -63,6 +66,7 @@ class LoopConfig(Frozen):
     work_s: float = Field(default=1800.0, gt=0)
     record_dir: str | None = None
     record_frames: bool = False
+    history_limit: int = Field(default=1000, ge=1, le=100000)
     # Only fake-camera + dry-run demos may auto-start; real hardware stays HOLD.
     auto_start_simulation: bool = True
 

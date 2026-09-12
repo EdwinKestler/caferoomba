@@ -2,6 +2,8 @@
 """_type_: _description_: this is the continuous_drive.py: 
 
 """
+raise RuntimeError("Legacy GPIO rover disabled; use python -m caferoomba run-companion")
+
 import sys
 from robot_drive import Robot
 

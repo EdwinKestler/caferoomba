@@ -24,6 +24,7 @@ runtime = ["onnxruntime>=1.18,<2"]
 geofence = ["shapely>=2,<3", "pyproj>=3.6,<4", "pykml==0.2.0", "lxml>=5,<7"]
 telemetry = ["mavsdk==3.17.2"]
 realsense = ["pyrealsense2>=2.54,<3"]
+usb-camera = ["opencv-python-headless>=4.8,<5"]
 runtime-test = ["pytest>=8,<10", "ruff>=0.6,<1"]
 cpu = [
   "torch>=2.4",

@@ -14,19 +14,22 @@ def supervise(
     observation_age_ms: int | None,
     max_observation_age_ms: int = 300,
     operator_stop: bool = False,
-    heartbeat_ok: bool = True,
+    heartbeat_ok: bool = False,
+    vehicle_health_ok: bool = False,
     nan_prediction: bool = False,
     required_sensor_missing: bool = False,
     max_speed_mps: float = 0.8,
     max_abs_yaw_rad_s: float = 1.2,
     geofence_ok: bool = True,
-    footprint_clear: bool = True,
+    footprint_clear: bool = False,
 ) -> SafetyDecision:
     reasons: list[str] = []
     if operator_stop:
         reasons.append("operator_stop")
     if not heartbeat_ok:
         reasons.append("lost_heartbeat")
+    if not vehicle_health_ok:
+        reasons.append("vehicle_unhealthy")
     if nan_prediction:
         reasons.append("nan_prediction")
     if required_sensor_missing:
@@ -57,7 +60,7 @@ def supervise(
         reasons.append("yaw_limit")
     if not geofence_ok:
         reasons.append("geofence")
-    if not footprint_clear:
+    if not footprint_clear and intent.action is not ActionLabel.STOP:
         reasons.append("footprint_blocked")
     if reasons:
         return SafetyDecision(

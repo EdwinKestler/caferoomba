@@ -4,12 +4,22 @@ from __future__ import annotations
 from caferoomba.app.config import CompanionConfig
 
 
-def apply_overrides(config: CompanionConfig, *, camera=None, vehicle=None) -> CompanionConfig:
+def apply_overrides(config: CompanionConfig, *, camera=None, vehicle=None,
+                    camera_device=None, vehicle_device=None, policy_path=None,
+                    record_dir=None) -> CompanionConfig:
     updated = config.model_copy(deep=True)
     if camera is not None:
         updated.camera.backend = camera
     if vehicle is not None:
         updated.vehicle.backend = vehicle
+    if camera_device is not None:
+        updated.camera.device = camera_device
+    if vehicle_device is not None:
+        updated.vehicle.device = vehicle_device
+    if policy_path is not None:
+        updated.policy.onnx_path = policy_path
+    if record_dir is not None:
+        updated.loop.record_dir = record_dir
     return CompanionConfig.model_validate(updated.model_dump())
 
 
@@ -24,7 +34,15 @@ def build_camera(config: CompanionConfig):
     if camera.backend == "realsense":
         from caferoomba.perception.realsense import RealSenseCamera
         native = RealSenseCamera(**kwargs,
+                                 serial_number=camera.serial_number,
                                  allow_infrared_diagnostics=camera.allow_infrared_diagnostics)
+    elif camera.backend == "usb":
+        from caferoomba.perception.process import ProcessCamera
+        from caferoomba.perception.usb import UsbCamera
+        if not camera.device:
+            raise ValueError("USB camera requires an explicit /dev/v4l/by-id device path")
+        native = UsbCamera(device=camera.device, **kwargs)
+        return ProcessCamera(native)
     elif camera.backend == "imx219":
         from caferoomba.perception.csi_imx219 import Imx219Camera
         native = Imx219Camera(sensor_id=camera.sensor_id, **kwargs)

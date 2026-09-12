@@ -1,0 +1,19 @@
+# USB UVC camera: RGB only, no depth/clearance is inferred.
+camera:
+  backend: usb
+  device: /dev/v4l/by-id/REPLACE_WITH_WEBCAM_VIDEO_INDEX0
+  capture_width: 640
+  capture_height: 480
+  fps: 15
+vehicle:
+  backend: serial-passive
+  device: /dev/serial/by-id/REPLACE_WITH_CUBE_IF00
+  baud: 115200
+  allow_commands: false
+policy:
+  onnx_path: null
+  execution_providers: [CPUExecutionProvider]
+loop:
+  auto_start_simulation: false
+  record_dir: artifacts/shadow-runs
+  record_frames: true

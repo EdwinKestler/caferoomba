@@ -26,21 +26,29 @@ class RunRecorder:
         self._thread = None
         self.dropped = self.written = 0
         self.error = None
+        self._lifecycle = threading.Lock()
+        self._accepting = False
 
     def open(self):
+        if self._thread is not None:
+            raise RuntimeError("recorder is single-use")
         self.path.mkdir(parents=True, exist_ok=False)
         self._thread = threading.Thread(
             target=self._worker, name="caferoomba-recorder", daemon=True
         )
         self._thread.start()
+        self._accepting = True
 
     def record(self, row: dict, sample=None):
-        if self.error:
-            raise RuntimeError(f"recording failed: {self.error}")
-        try:
-            self._queue.put_nowait((dict(row), sample if self.save_frames else None))
-        except queue.Full:
-            self.dropped += 1
+        with self._lifecycle:
+            if not self._accepting:
+                raise RuntimeError("recording requires an open recorder")
+            if self.error:
+                raise RuntimeError(f"recording failed: {self.error}")
+            try:
+                self._queue.put_nowait((dict(row), sample if self.save_frames else None))
+            except queue.Full:
+                self.dropped += 1
 
     def _worker(self):
         try:
@@ -70,13 +78,17 @@ class RunRecorder:
             self.error = str(exc)
 
     def close(self, *, summary=None):
-        self._stop.set()
+        with self._lifecycle:
+            self._accepting = False
+            self._stop.set()
+        if self._thread is None:
+            return
         if self._thread:
             self._thread.join(timeout=10)
             if self._thread.is_alive():
                 raise RuntimeError("recorder did not drain before deadline")
         manifest = {"schema": "caferoomba.shadow-run.v1", "run_id": self.run_id,
-                    "complete": self.error is None, "written": self.written,
+                    "complete": self.error is None and self.dropped == 0, "written": self.written,
                     "dropped": self.dropped, "error": self.error,
                     "commands_sent": 0, "summary": summary or {}}
         (self.path / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")

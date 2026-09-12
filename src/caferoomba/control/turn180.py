@@ -27,8 +27,15 @@ def heading_error(current: float, target: float) -> float:
 
 
 class Turn180Machine:
+    def abort(self):
+        """Latch a stopped turn; recovery requires a new validated turn machine."""
+        self.state = TurnState.STOP_FAULT
+
     def __init__(self, *, tolerance_rad=math.radians(8), timeout_s=8.0,
                  retrigger_cooldown_s=4.0):
+        if not all(math.isfinite(v) for v in
+                   (tolerance_rad, timeout_s, retrigger_cooldown_s)):
+            raise ValueError("turn parameters must be finite")
         if not 0 < tolerance_rad < math.pi / 2 or timeout_s <= 0 or retrigger_cooldown_s < 0:
             raise ValueError("invalid turn parameters")
         self.tolerance_rad, self.timeout_s = tolerance_rad, timeout_s

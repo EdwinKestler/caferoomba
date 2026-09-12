@@ -1,3 +1,5 @@
+raise RuntimeError("Legacy GPIO servo disabled; Cube owns actuators in the portable runtime")
+
 import pigpio
 
 class Servo:

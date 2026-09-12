@@ -5,6 +5,19 @@ on:
 permissions:
   contents: read
 jobs:
+  portable-runtime:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install runtime without training frameworks
+        run: python -m pip install -e ".[runtime,runtime-test,geofence,autopilot,usb-camera]"
+      - name: Portable runtime tests and host simulation
+        run: |
+          python -m pytest tests/test_portable_runtime.py tests/test_usb_camera.py tests/test_camera_process.py tests/test_vehicle_health.py tests/test_execution_providers.py tests/test_runtime_lifecycle.py tests/test_runtime_integrity.py tests/test_companion_loop.py tests/test_mission_fsm.py tests/test_safety_and_turn.py tests/test_geofence_integration.py -q
+          python -m caferoomba run-companion --cycles 12
   test:
     runs-on: ubuntu-latest
     steps:

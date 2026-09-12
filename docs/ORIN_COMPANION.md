@@ -2,7 +2,9 @@
 
 ## Choose the correct source state
 
-**Public baseline:** `eb9a2a4` has a fake-camera/dry-run companion skeleton and USB inspection tools. **Local integration:** uncommitted workstation changes on `feat/orin-shadow-integration` add geofencing, shadow-mode composition, stricter perception contracts, passive serial/MAVSDK observation, and recording. This documentation/site publication does not merge that code.
+The current checkout contains the portable companion runtime described in
+[PORTABLE_RUNTIME.md](PORTABLE_RUNTIME.md). Git status and the checked-out source
+determine availability; historical publication hashes are not runtime configuration.
 
 Use `.venv/bin/python` for runtime work. Keep `.venv-dev` for training. Inspect `git status`, the actual configuration classes, and CLI help before assuming a feature is present.
 
@@ -16,15 +18,23 @@ Use `.venv/bin/python` for runtime work. Keep `.venv-dev` for training. Inspect 
 
 The package and dependencies must already be installed in `.venv`. No ONNX path means the baseline STOP policy; that is not inference from a trained model.
 
-## Local integration configuration (not a public-baseline recipe)
+## Runtime configuration
 
-The local implementation has `camera`, `vehicle`, `fence`, `policy` and `loop` configuration sections. It supports fake/RealSense/IMX219 camera interfaces; dry-run, serial-passive and MAVSDK observation backends; and a configured ONNX path. All vehicle paths remain non-actuating. Real-camera profiles remain HOLD.
+The implementation has `camera`, `vehicle`, `fence`, `policy` and `loop` sections.
+Portable profiles use fake/RealSense/USB-UVC cameras and dry-run or serial-passive
+vehicles. IMX219/Argus remains an optional Jetson-specific backend. MAVSDK is a
+legacy observation option without authoritative vehicle health; it remains
+fail-closed. All vehicle paths are non-actuating. Healthy real-camera profiles
+stay HOLD; stale observations or unhealthy vehicle state enter FAULT.
 
 Set map selection, exclusions and clearance explicitly. Set camera temporal sampling to match the model contract. Configure a stable serial path and expected system identity. Use a private run directory under `artifacts/` for recorded images and telemetry.
 
-## Known CLI limitation
+## CLI reporting
 
-The local `cli.py` was not fully refactored during the preceding implementation session. Its old top-level `ok`/`armed` summary is not an authoritative statement of Cube state or per-cycle safety. Do not advertise unimplemented flags such as `--policy`. Verify actual help and inspect detailed runtime records. CLI completion and tests are a pending milestone.
+The CLI reports observed arming state, simulation/shadow status, fault reasons,
+and recording location. FAULT/ESTOP produces `ok: false` and exit 1. Use
+`--camera-device`, `--vehicle-device`, `--policy`, and `--record-dir` to override
+the selected profile. A completed run is not evidence of autonomous operation.
 
 ## USB observations
 

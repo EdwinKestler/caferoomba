@@ -21,7 +21,14 @@ class DryRunVehicle:
         self._connected = False
 
     def telemetry(self) -> TelemetrySnapshot:
-        return TelemetrySnapshot(heartbeat_ok=True, gps_ok=False, armed=False, mode="DRY_RUN")
+        return TelemetrySnapshot(
+            heartbeat_ok=True,
+            vehicle_health_ok=True,
+            gps_ok=False,
+            armed=False,
+            mode="DRY_RUN",
+            is_synthetic=True,
+        )
 
     def send_intent(self, intent: Intent, **safety_kwargs) -> SafetyDecision:
         if not self._connected:

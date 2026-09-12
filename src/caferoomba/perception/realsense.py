@@ -16,10 +16,13 @@ class RealSenseCamera:
     name = "realsense"
 
     def __init__(self, *, width=640, height=480, fps=15, timeout_ms=300,
-                 allow_infrared_diagnostics=False):
+                 allow_infrared_diagnostics=False, serial_number=None):
+        if serial_number is not None and not str(serial_number).strip():
+            raise ValueError("RealSense serial number must not be blank")
         self.width, self.height, self.fps = width, height, fps
         self.timeout_ms = timeout_ms
         self.allow_infrared = allow_infrared_diagnostics
+        self.serial_number = str(serial_number).strip() if serial_number is not None else None
         self._pipeline = self._rs = self._first = None
         self.usb_type, self.stream = "unknown", "closed"
         self.depth_scale_m = None
@@ -71,6 +74,8 @@ class RealSenseCamera:
         errors = []
         for name, streams in profiles:
             pipeline, cfg = rs.pipeline(), rs.config()
+            if self.serial_number is not None:
+                cfg.enable_device(self.serial_number)
             for spec in streams:
                 cfg.enable_stream(*spec)
             started = False

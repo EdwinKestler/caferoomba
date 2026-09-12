@@ -25,7 +25,7 @@ class ConstantPolicy:
         }
 
 
-def load_policy(onnx_path: str | None):
+def load_policy(onnx_path: str | None, *, execution_providers=("CPUExecutionProvider",)):
     if not onnx_path:
         return ConstantPolicy()
     path = Path(onnx_path)
@@ -33,4 +33,4 @@ def load_policy(onnx_path: str | None):
         raise FileNotFoundError(f"configured policy artifact is missing: {path}")
     from caferoomba.deployment.inference import OnboardPolicy
 
-    return OnboardPolicy(path)
+    return OnboardPolicy(path, execution_providers=execution_providers)

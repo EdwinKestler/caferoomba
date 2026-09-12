@@ -6,13 +6,17 @@
 
 Record CPU architecture, kernel, installed NVIDIA board-support/JetPack/L4T stack, camera services, native OpenCV/GStreamer capabilities, CUDA/TensorRT versions, Python ABI and available memory. Do not treat workstation wheels or an Ubuntu release label as a target compatibility check.
 
-Preserve existing `.venv` and system libraries. Use a tested, target-specific dependency manifest. The source adds runtime extras locally; those extras must be merged and verified before relying on them from public `main`.
+Preserve existing `.venv` and system libraries. Use a tested, target-specific
+dependency manifest. See [portable runtime](PORTABLE_RUNTIME.md) for the Python
+3.11 USB/Cube installation and configuration contract. Runtime extras are in
+the checkout; target ARM64 native wheel/driver compatibility remains unverified.
 
 ## Staged deployment
 
 1. Import/configuration checks with no hardware I/O.
 2. CPU ONNX replay in `.venv`, using a validated model contract.
-3. RealSense and IMX219 tests independently with timestamp/modality reports.
+3. RealSense and USB UVC tests independently with timestamp/modality reports.
+   IMX219/Argus is optional and is not part of the portable USB profile.
 4. Cube telemetry observation under single serial ownership.
 5. Combined shadow-mode run and deterministic log review.
 6. Target acceleration and numerical/latency checks.
