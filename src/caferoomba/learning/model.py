@@ -45,14 +45,16 @@ def build_policy(*, backbone: str = "tiny", in_frames: int = 8, image_size: int 
     if backbone == "tiny":
         return TinyTemporalPolicy(in_frames=in_frames, image_size=image_size)
     if backbone == "mobilenet_v3_small":
-        from torchvision.models import MobileNet_V3_Small_Weights, mobilenet_v3_small
+        from torchvision.models import mobilenet_v3_small
 
         class MobileNetTemporal(nn.Module):
             def __init__(self) -> None:
                 super().__init__()
                 self.in_frames = in_frames
                 self.image_size = image_size
-                net = mobilenet_v3_small(weights=MobileNet_V3_Small_Weights.DEFAULT)
+                # Checkpoint construction must be offline-safe. A caller that wants
+                # pretrained weights can load them explicitly before training.
+                net = mobilenet_v3_small(weights=None)
                 self.features = net.features
                 self.pool = nn.AdaptiveAvgPool2d(1)
                 self.temporal = nn.Conv1d(576, 128, kernel_size=3, padding=0)

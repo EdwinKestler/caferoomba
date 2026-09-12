@@ -31,6 +31,10 @@ jobs:
           python -m pip install -e ".[dev,geofence]"
           python -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
           python -m pip install onnx onnxruntime
+      - name: Ensure real-video preparation test dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
       - name: Tests
         run: python -m pytest tests -q
         env:

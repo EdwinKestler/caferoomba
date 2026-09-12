@@ -18,7 +18,12 @@ Research and software integration for a camera-based coffee-patio navigation pol
 
 ## Critical limitations
 
-The public smoke trainer reuses the first small batch. It falls back to all clips if the train split is empty; this must be removed before held-out evaluation. The current dataset loader does not consume Cosmos annotations. Thus this publication does not describe a Cosmos-distilled policy, Cosmos fine-tune, or Google Cloud-trained checkpoint.
+The full-data trainer visits all training batches and selects checkpoints using
+validation only. Empty training splits and cross-split run leakage are rejected.
+The separate synthetic smoke path remains a software test. The dataset loader
+does not consume Cosmos annotations, so this is not a Cosmos-distilled policy or
+Cosmos fine-tune. Real-data/Colab execution must be recorded separately from
+local generated-video tests. See [training workflow](COLAB_TRAINING.md).
 
 A turn trigger does not select a safe pivot direction, verify clearance, establish an adjacent coverage path, or complete docking. Model softmax/turn scores are not physical safety signals.
 
@@ -26,7 +31,9 @@ A turn trigger does not select a safe pivot direction, verify clearance, establi
 
 Version each artifact with its source revision, dataset split hashes, preprocessing, RGB/modality expectations, temporal spacing, class order, input shape, output semantics, numeric precision and checksum. Compare PyTorch, ONNX, and any target TensorRT results on representative inputs—not only a zero tensor. Report measured target latency separately from model accuracy.
 
-The local integration adds output/shape checks and model hashing, but remains a separately unmerged source state. Do not infer target compatibility from desktop import success.
+The runtime checks output/shape and model hashes. The training handoff adds
+dataset identity and representative-input ONNX comparison. Do not infer target
+compatibility from desktop import or export success.
 
 ## Required evaluation before a stronger claim
 

@@ -27,7 +27,11 @@ Distinguish commanded steering from observed yaw. Slippage, latency and operator
 
 ## Splits and evaluation
 
-Split by complete runs, sessions or physical settings before extracting overlapping clips. Do not randomly split near-identical adjacent frames across training and test sets. Empty/missing training splits must raise an error, not fall back to all examples. The public smoke trainer currently has that fallback and is not ready for held-out scientific evaluation.
+Split by complete runs, sessions or physical settings before extracting overlapping
+clips. Do not randomly split near-identical adjacent frames across training and
+test sets. Empty/missing training splits raise an error; there is no fallback to
+all examples. The [Colab training workflow](COLAB_TRAINING.md) prepares reviewed
+FPV records, trains all batches, selects on validation and evaluates test separately.
 
 Report class balance, missed/false turn events, intervention frequency, observation latency, and eventually coverage and return/docking outcomes. Do not turn synthetic classification accuracy into an agricultural-impact claim.
 

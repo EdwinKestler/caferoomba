@@ -1,8 +1,8 @@
 # Colab Enterprise on `flatbox-serverless-demos`
 
-Verified 2026-09-11. Billing is on.
+Historical infrastructure snapshot verified 2026-09-11; refresh cloud state before use.
 
-A **CPU runtime is running** (2026-09-12 UTC): `kestler-20260911-211649`,
+A CPU runtime **was observed running** (2026-09-12 UTC): `kestler-20260911-211649`,
 template `caferoomba-cpu`, `e2-standard-4`, `HEALTHY` / `RUNNING`, idle stop
 **1 hour**, image **Python 3.12**.
 
@@ -54,6 +54,10 @@ gcloud colab runtimes create --runtime-template=caferoomba-cpu --region=us-centr
 ```
 
 ## CPU notebook cells (caferoomba-cpu)
+
+For the new real-data workflow use [Colab training](COLAB_TRAINING.md) and
+notebooks 01–03. The cells below remain historical synthetic smoke instructions,
+not the real-FPV training pipeline.
 
 Install **dev + geofence** extras or pytest collection fails on `pykml`:
 
