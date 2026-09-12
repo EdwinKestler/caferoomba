@@ -4,8 +4,18 @@ Verified 2026-09-11. Billing is on.
 
 A **CPU runtime is running** (2026-09-12 UTC): `kestler-20260911-211649`,
 template `caferoomba-cpu`, `e2-standard-4`, `HEALTHY` / `RUNNING`, idle stop
-**1 hour**, image **Python 3.12**. That is a live notebook VM, not a completed
-training job. Stop it in the console when idle to avoid Compute charges.
+**1 hour**, image **Python 3.12**.
+
+## Verified CPU smoke (owner notebook, 2026-09-12)
+
+On this runtime, after `pip install -e ".[dev,geofence]"`:
+
+- `python -m pytest tests -q` — **46 passed** (Python 3.12)
+- `python -m caferoomba demo-fixture` — `"synthetic": true`, `"ok": true`
+- Recursive GCS list of `gs://caferoomba/media/data/raw/fpv/` — five `runid00x` source videos plus `clips/part_*.mp4`
+- Copied smoke artifacts to `gs://caferoomba/artifacts/colab-cpu-smoke/cpu-smoke/` (`manifest.json`, `student.onnx`, `student.pt`, synthetic frames)
+
+This is **Colab Enterprise CPU execution of the public test/fixture path**. It is not GPU training, Cosmos inference, labeled-FPV learning, or robot motion. Stop the runtime when idle.
 
 ## What is enabled
 

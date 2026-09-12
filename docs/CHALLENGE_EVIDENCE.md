@@ -9,7 +9,7 @@ This is an independent project developed in the Google Cloud and NVIDIA develope
 | Theme | Supported material | Boundary |
 |---|---|---|
 | Technical approach | Offline teacher/onboard student architecture; typed intents; safety/FSM design | Live teacher and complete autonomous mission are not verified |
-| Technology use | Public CPU PyTorch/ONNX code; target Jetson; historical private GCS storage record | CPU inference is not GPU deployment; storage is not Colab training |
+| Technology use | Public CPU PyTorch/ONNX code; Colab Enterprise CPU runtime ran pytest + synthetic fixture; private GCS FPV prefixes listed | CPU Colab smoke is not GPU training, Cosmos, or Jetson deployment |
 | Usefulness | Coffee-patio sweeping use case and owner-provided physical-prototype media | No measured labor savings, drying-quality gain, yield or ROI |
 | Presentation | Public source, project website, architecture, dataset/model/safety documentation | Documentation does not substitute for execution evidence |
 

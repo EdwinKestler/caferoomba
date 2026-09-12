@@ -19,6 +19,15 @@
       "not_claimed": ["cosmos_inference", "colab_enterprise", "public_dataset", "autonomous_robot"]
     },
     {
+      "id": "colab-enterprise-cpu-smoke",
+      "evidence_state": "tested_cloud",
+      "is_synthetic": true,
+      "runtime": "caferoomba-cpu e2-standard-4 Python 3.12",
+      "command": "pip install -e .[dev,geofence] && pytest tests -q && caferoomba demo-fixture && gcloud storage ls --recursive gs://caferoomba/media/data/raw/fpv/ && gcloud storage cp -r /tmp/cpu-smoke gs://caferoomba/artifacts/colab-cpu-smoke/",
+      "artifacts": "gs://caferoomba/artifacts/colab-cpu-smoke/cpu-smoke/",
+      "not_claimed": ["gpu_training", "cosmos_inference", "fpv_labeled_learning", "jetson", "autonomous_robot"]
+    },
+    {
       "id": "api-keys-local-env",
       "evidence_state": "implemented",
       "is_synthetic": false,

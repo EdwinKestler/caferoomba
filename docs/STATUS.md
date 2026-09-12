@@ -13,7 +13,7 @@
 | Small temporal student | Human action and turn-onset targets | Full-dataset trainer and held-out evaluation required |
 | Cosmos teacher | Mock implementation; live function refuses execution | Authorized backend, reviewed annotations, and training integration required |
 | Google Cloud Storage | Prior project records describe private media storage | Bucket not independently reinspected during this publication |
-| Colab Enterprise training | CPU runtime `caferoomba-cpu` observed RUNNING; no student training job | See [Colab Enterprise](COLAB_ENTERPRISE.md). Executed training notebook still required |
+| Colab Enterprise training | CPU smoke on `caferoomba-cpu`: 46 tests + synthetic `demo-fixture` + GCS copy | See [Colab Enterprise](COLAB_ENTERPRISE.md). Not GPU/FPV training |
 | Companion FSM / camera buffer | Public dry-run skeleton | Local refactor adds stricter validation and shadow-mode composition |
 | KML/KMZ geofence | Public placeholder | Local parser/projection/path checks; regression and hardware validation pending |
 | Cube USB inspection | Public receive-only capture script | Local passive-serial and MAVSDK observation adapters need integration verification |
