@@ -1,4 +1,3 @@
-
 from caferoomba.control.intents import intent_from_policy, to_mavlink_yaw_rate
 from caferoomba.control.mission import MissionScheduler
 from caferoomba.control.patch_store import PatchStore
@@ -41,10 +40,12 @@ def test_turn180_wraparound_and_retrigger():
         machine.step(heading, 0.1, footprint_clear=True)
         if machine.state is TurnState.ALIGN_ADVANCE_PASS:
             break
-    assert machine.state in {TurnState.ALIGN_ADVANCE_PASS, TurnState.SWEEP}
+    assert machine.state is TurnState.ALIGN_ADVANCE_PASS
     machine.step(heading, 0.1, footprint_clear=True)
+    assert machine.state is TurnState.ALIGN_ADVANCE_PASS  # No automatic row completion.
+    machine.step(heading, 0.1, footprint_clear=True, alignment_complete=True)
     assert machine.state is TurnState.SWEEP
-    assert machine.trigger(heading, 1, footprint_clear=True) is TurnState.SWEEP  # cooldown
+    assert machine.trigger(heading, 1, footprint_clear=True) is TurnState.SWEEP
 
 
 def test_turn180_blocked_footprint_faults():

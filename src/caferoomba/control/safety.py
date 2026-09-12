@@ -31,10 +31,19 @@ def supervise(
         reasons.append("nan_prediction")
     if required_sensor_missing:
         reasons.append("missing_required_sensor")
-    if observation_age_ms is None or observation_age_ms > max_observation_age_ms:
+    if (observation_age_ms is None or not math.isfinite(observation_age_ms)
+            or observation_age_ms < 0 or observation_age_ms > max_observation_age_ms):
         reasons.append("stale_observation")
-    if now_ms > intent.expires_at_ms:
+    if now_ms >= intent.expires_at_ms:
         reasons.append("expired_intent")
+    if intent.issued_at_ms > now_ms or intent.expires_at_ms <= intent.issued_at_ms:
+        reasons.append("invalid_intent_time")
+    if intent.coordinate_frame != "body":
+        reasons.append("invalid_coordinate_frame")
+    if intent.action is ActionLabel.STOP and (
+        intent.speed_mps not in (None, 0) or intent.yaw_rate_rad_s not in (None, 0)
+    ):
+        reasons.append("nonzero_stop")
     if not intent.valid:
         reasons.append("invalid_intent")
     if intent.speed_mps is not None and (

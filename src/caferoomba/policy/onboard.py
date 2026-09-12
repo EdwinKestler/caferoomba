@@ -30,7 +30,7 @@ def load_policy(onnx_path: str | None):
         return ConstantPolicy()
     path = Path(onnx_path)
     if not path.is_file():
-        return ConstantPolicy()
+        raise FileNotFoundError(f"configured policy artifact is missing: {path}")
     from caferoomba.deployment.inference import OnboardPolicy
 
     return OnboardPolicy(path)
