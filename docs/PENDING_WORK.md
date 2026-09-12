@@ -1,11 +1,21 @@
-# Pending work (priority)
+# Roadmap and acceptance gates
 
-1. Human operator labels for FPV runs in `data/raw/fpv/` (videos are local + GCS).
-2. Cosmos teacher: local NIM Docker is **blocked on this 3090 Ti** (see
-   `docs/DEPLOYMENT_COSMOS_NIM.md`). Hosted `integrate.api.nvidia.com` needs an
-   explicit paid-call approval. Keys exist in `.env`.
-3. Approved Colab Enterprise training job (project `flatbox-serverless-demos` exists; no training run yet).
-4. Identify the actual Jetson module and JetPack; onboard ONNX/TensorRT loop.
-5. Supervised Cube Orange dry-then-hardware plan (no auto-arm).
-6. Confirm work/idle durations and charger/dock interfaces.
-7. Edwin folder-trust if project Grok hooks/skills should load in new CLI sessions.
+This roadmap is an implementation order, not a delivery promise or a statement of production readiness.
+
+| Stage | Work | Acceptance evidence |
+|---|---|---|
+| 1. Finish local integration | CLI output/flags, cleanup/failure paths, dependency manifests, final regression | Full named-revision suite and logs; no unrelated source changes merged implicitly |
+| 2. Real observations | Synchronized FPV, human commands, Cube state, calibration and timestamp mapping | Recorded run with provenance and synchronization diagnostics; no actuation |
+| 3. Full-data learning | Strict split handling, minibatch iteration and held-out evaluation | All training examples used; no fallback into test data; reproducible reports |
+| 4. Cosmos teacher | Authorized provider adapter, reviewed annotations, masked auxiliary losses | Actual request/response provenance and student ablation |
+| 5. Cloud execution | Approved Colab Enterprise student training/evaluation | Executed job/notebook, dataset/model hashes and redacted environment record |
+| 6. Navigation integration | Complete path/footprint checks, patch approach, turn connector and next-pass verification | Deterministic replay and Rover simulation, including failure cases |
+| 7. Target deployment | Orin native-camera compatibility, ONNX/acceleration parity and latency | Device-specific measurements; no desktop evidence relabelled as Orin |
+| 8. Supervised physical work | Command adapter, independent watchdog, operator authority, safe return | Explicitly approved trials with interventions, errors and safety observations recorded |
+| 9. Docking and repeat missions | Dock/contact/charging confirmation, energy readiness, serviced-patch memory | Closed-loop mission evidence rather than a GPS arrival or timer alone |
+
+## Decisions still requiring measurement or confirmation
+
+Brush/robot footprint; steering and pivot capability; usable depth coverage; localization accuracy; safe speeds and braking distance; work/idle intervals; dock interface; temporal camera sampling; exact deployed native software stack.
+
+More skills or MCP servers are not the current bottleneck. The bottleneck is connecting real data, validated learning, safe runtime state, and device evidence.

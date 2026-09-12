@@ -60,3 +60,6 @@ data/raw/**
 # Allow tiny synthetic clips used by offline tests
 !fixtures/synthetic/
 !fixtures/synthetic/**
+
+# Disposable static website output (source is site/ and allowlisted Markdown)
+/_site/

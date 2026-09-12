@@ -1,47 +1,30 @@
-# Cosmos 3 Reasoner NIM — local Docker evaluation
+# Cosmos teacher integration
 
-Evaluated 2026-09-11 on this development host. **Not deployed.** This is not
-Cosmos inference evidence.
+**Status: planned live integration; mock-only in the published execution path.**
 
-Official image from NVIDIA’s Linux+Docker instructions:
+The requested model identifier in source is `nvidia/cosmos3-nano-reasoner`. Verify the actual provider model, endpoint, schema, hardware requirements and terms before an authorized run. This document does not claim a verified endpoint or that a particular GPU can load it.
 
-```text
-nvcr.io/nim/nvidia/cosmos3-reasoner:latest
--e NIM_MODEL_SIZE=nano   # serves nvidia/cosmos3-nano-reasoner
-```
+## What is implemented
 
-The catalog curl test talks to `http://127.0.0.1:8000/v1/chat/completions`.
+`teacher/cosmos.py` provides a deterministic mock annotation path with `is_mock=true`. `annotate_live()` checks configuration and then refuses execution even when credentials exist. Adding an API key alone therefore cannot activate live inference.
 
-## Host vs NVIDIA support matrix (VLM NIM 1.7.0)
+The current student training function does not consume those annotations. A completed teacher request and a trained student are separate implementation/evidence milestones.
 
-| Requirement | This host | Cosmos3-Nano (8B) official |
-|---|---|---|
-| GPU | GeForce RTX 3090 Ti, **24 GiB**, CC **8.6** | Generic BF16: **>56 GiB**. FP8: CC **≥ 8.9** (Ada). Named floor: L40S **48 GiB FP8** |
-| Disk | **~30 GiB free** on `/` | **20–30 GiB** container+weights |
-| RAM | 60 GiB total, ~17 GiB available | NIM often wants a large host RAM headroom |
-| Docker | 29.x, `nvidia` runtime in daemon.json | Required |
-| NGC key | `NVIDIA_API_KEY` in local `.env`; `NGC_API_KEY` aliased | `docker login nvcr.io` + `-e NGC_API_KEY` |
+## Required implementation
 
-Verdict: **do not `docker run` this NIM on the 3090 Ti.** It is below the
-published VRAM floor, cannot use the FP8 profile (CC 8.6 < 8.9), and a pull
-would consume most remaining disk.
+1. Explicit backend selection with bounded timeouts, retries, rate limits and approved spending.
+2. Causal image/video request encoding that matches the verified provider contract.
+3. Strict response schema validation, abstention and malformed-output handling.
+4. Content hashes for the actual input bytes, model revision and prompt version; do not rely only on filenames.
+5. Human review and masked auxiliary targets for accepted annotations.
+6. An evaluation comparing the same student/data split with and without teacher supervision.
 
-Super (32B) is further out of reach.
+The teacher remains offline. The robot must not require cloud connectivity, API credentials, or live reasoning calls to stop safely or follow a local policy.
 
-## What would work later
+## Cloud and local execution
 
-- A **48 GiB+ Ada/Hopper** GPU (L40S FP8, RTX PRO 6000, H100, …) **and**
-  **≥40 GiB free disk**, then:
-  `./scripts/cosmos_nim_preflight.sh` must exit 0 before any pull.
-- Until then, keep the teacher on **mock** for tests, or use the **hosted**
-  NVIDIA API (`COSMOS_TEACHER_URL=https://integrate.api.nvidia.com/v1`) only
-  after an explicit paid-call approval. Hosted calls are not local NIM
-  evidence.
+The earlier repository records describe an attempted local NIM feasibility check on a desktop GPU; that is not a universal memory-support matrix. Verify the exact backend/model/precision rather than copying an old hardware estimate. Colab Enterprise can orchestrate preparation and student training; teacher inference may need a separate authorized endpoint or compatible GPU environment.
 
-## Commands we did **not** run
+No paid API call, provisioning action, model download with new terms, or private-video upload should be triggered by an ordinary test import.
 
-- `docker login nvcr.io`
-- `docker pull nvcr.io/nim/nvidia/cosmos3-reasoner:latest`
-- `docker run ... --gpus all ... cosmos3-reasoner`
-
-Preflight only: `./scripts/cosmos_nim_preflight.sh`.
+Primary starting points: [NVIDIA Cosmos repository](https://github.com/NVIDIA/cosmos), [Colab Enterprise documentation](https://cloud.google.com/colab/docs). Record the exact references used by each future run.

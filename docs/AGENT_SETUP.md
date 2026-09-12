@@ -1,48 +1,29 @@
 # Agent setup
 
-Grok Build 1.0.25. Selected model is whatever this session was launched with
-(user asked for Grok 4.7 as a backend label; this agent did not download a
-separate package).
+## Existing project workflow
 
-## Skills
+Preserve Project Memory v2.5. Follow `AGENTS.md` and `docs/PROJECT_MEMORY.md` at session start, after admitted-file changes, and before completion. Cache hits are discovery hints, not current source truth or permission to operate hardware. Never place secrets in memory.
 
-Repository skills live under `.grok/skills/` (copied to `.agents/skills/`):
+Repository skills under `.grok/skills/` and `.agents/skills/` include the preserved `project-memory` skill plus environment, Cosmos teacher, imitation learning, Jetson export, rover safety and challenge evidence skills. These are development tools, not robot runtime dependencies.
 
-- `project-memory` (preserved)
-- `caferoomba-environment`
-- `caferoomba-cosmos-teacher`
-- `caferoomba-imitation-learning`
-- `caferoomba-jetson-export`
-- `caferoomba-rover-safety`
-- `caferoomba-challenge-evidence`
+The earlier setup recorded Grok Build 1.0.25. Verify the installed agent and selected model rather than assuming a product/model label specifies a local installer. Project trust controls whether project instructions, skills and hooks load. Only the owner grants folder trust.
 
-This coding session loaded the new CafeRoomba skills after they were written.
-`grok inspect` from an **untrusted** CLI process reports `Project trusted: no`
-and therefore omits project instructions, project skills, and project hooks.
-Do not grant blanket `/hooks-trust` unless Edwin does so.
+## Environment ownership
 
-## MCP
+| Environment | Use |
+|---|---|
+| `.venv-dev` | CPU training, export and development tests |
+| `.venv` | Python 3.11 runtime inference and camera/telemetry integration |
+| `.caferoomba/site-venv` | Optional website build/check tools |
 
-| Server | Configured | Connected in this session | Notes |
-|---|---|---|---|
-| GitHub | reused existing session integration (93 tools) | yes | read tools used; no project `npx @latest` added |
-| xAI docs | `.grok/config.toml` → `https://docs.x.ai/api/mcp` | verify with `grok mcp doctor` after folder trust | no secrets |
-| Google Cloud MCP | omitted | no | spending allowance zero |
-| Cloudflare plugin MCPs | user plugin | docs healthy; API/builds/bindings/observability need auth | unrelated to robot runtime |
+Do not recreate or repurpose an existing environment without inspection. Never install `rover/requirements.txt` into the modern environments. Website generation must not execute/import robot control modules.
 
-Cleanup: delete `.grok/config.toml` `[mcp_servers.xai-docs]` or `grok mcp remove --scope project xai-docs`.
+## MCP integrations
 
-## Secrets and cloud
+GitHub read/review tools and optional documentation servers can support development. Verify configured versus connected status. Do not install duplicate filesystem/shell/memory systems or add unreviewed `@latest` servers. Cloud administration and billable jobs require appropriate explicit authorization. MCP tools never belong in the real-time control path.
 
-API keys live only in local `.env` (gitignored): `NVIDIA_API_KEY`,
-`X_AI_API_KEY` / `XAI_API_KEY`, `GOOGLE_CLOUD_PROJECT`,
-`CAFEROOMBA_GCS_BUCKET`. See `.env.example`. Do not print or commit values.
+## Publication workflow
 
-Gitignored large media is stored privately at `gs://caferoomba/media/` —
-`docs/GCS_MEDIA.md`. Live Cosmos / Colab jobs still need an explicit budget
-before they count as challenge inference/training evidence.
+The website/docs are published separately from the uncommitted local Orin integration. Review the changed-file list before committing. Preserve original code, license and historical evidence; do not claim test success from an old memory entry. Follow [Website maintenance](WEBSITE.md) and [Status](STATUS.md).
 
-## Local Python
-
-Isolated `.venv-dev` (Python 3.11). Do not install `rover/requirements.txt`.
-`scripts/bootstrap.py` is dry-run unless `--apply`.
+If terminal access becomes blocked, stop retrying equivalent commands. Continue only permitted file editing/retrieval and document which execution checks and memory closures remain incomplete.

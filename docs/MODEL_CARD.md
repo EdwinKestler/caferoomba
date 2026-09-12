@@ -1,13 +1,33 @@
-# Model card (student)
+# Student model card
 
-| Item | CPU milestone |
+## Intended use
+
+Research and software integration for a camera-based coffee-patio navigation policy. The current fixture model is not validated for autonomous actuation.
+
+| Property | Current public implementation |
 |---|---|
-| Backbone | `tiny` Conv2d+Conv1d (fixture). `mobilenet_v3_small` is available but not required for smoke. |
-| Inputs | `B,T,C,H,W` past/current frames only. Default smoke: T=8, H=W=64 |
-| Outputs | LEFT/STRAIGHT/RIGHT/STOP logits; TURN_180 logit |
-| Primary loss | cross-entropy on **human** action + BCE on human turn onset |
-| Teacher | optional auxiliary; mock never counts as Cosmos |
-| Export | static ONNX, CPU onnxruntime, class order `LEFT,STRAIGHT,RIGHT,STOP` |
-| Device for smoke | CPU (`torch==2.14.0+cpu`) |
+| Family | Small temporal visual policy |
+| Smoke backbone | `tiny` spatial/temporal convolution; optional MobileNet path in source |
+| Input | Float image history shaped `B,T,C,H,W`; smoke configuration `1,8,3,64,64` |
+| Class order | `LEFT, STRAIGHT, RIGHT, STOP` |
+| Additional output | Turn-onset logit, not a complete turn trajectory |
+| Targets | Human action cross-entropy plus human turn-onset binary cross-entropy |
+| Export | Static-shape ONNX; public replay uses CPU ONNX Runtime |
+| Teacher dependency onboard | None |
+| Data evidence | Synthetic fixture; no published real-FPV-trained navigation artifact in this release |
 
-Fixture accuracy is not patio coverage, docking, or agricultural benefit.
+## Critical limitations
+
+The public smoke trainer reuses the first small batch. It falls back to all clips if the train split is empty; this must be removed before held-out evaluation. The current dataset loader does not consume Cosmos annotations. Thus this publication does not describe a Cosmos-distilled policy, Cosmos fine-tune, or Google Cloud-trained checkpoint.
+
+A turn trigger does not select a safe pivot direction, verify clearance, establish an adjacent coverage path, or complete docking. Model softmax/turn scores are not physical safety signals.
+
+## Deployment contract
+
+Version each artifact with its source revision, dataset split hashes, preprocessing, RGB/modality expectations, temporal spacing, class order, input shape, output semantics, numeric precision and checksum. Compare PyTorch, ONNX, and any target TensorRT results on representative inputs—not only a zero tensor. Report measured target latency separately from model accuracy.
+
+The local integration adds output/shape checks and model hashing, but remains a separately unmerged source state. Do not infer target compatibility from desktop import success.
+
+## Required evaluation before a stronger claim
+
+Real demonstration training with a fixed held-out set; teacher-versus-no-teacher ablation when annotations are implemented; per-class/event errors; timestamp/failure injection; then supervised target-device trials with independent safety controls.

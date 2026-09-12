@@ -1,0 +1,15 @@
+{
+  "schema": "caferoomba.publication.v1",
+  "reviewed_at_utc": "2026-09-12",
+  "public_code_baseline": "eb9a2a427098b8f973d50b09906a9c75cb87a4a8",
+  "publication_scope": "website and documentation only",
+  "local_runtime_branch": "feat/orin-shadow-integration",
+  "local_runtime_merged": false,
+  "evidence": [
+    {"kind": "public_cpu_ci", "url": "https://github.com/EdwinKestler/caferoomba/actions/runs/34632508366", "synthetic": true},
+    {"kind": "prior_local_baseline_tests", "count": 26, "environment": ".venv-dev", "stage": "before integration edits"},
+    {"kind": "prior_local_focused_tests", "count": 13, "environment": ".venv", "stage": "after core integration edits, before later edits"}
+  ],
+  "not_claimed": ["full_post_edit_runtime_regression", "live_cosmos_inference", "colab_enterprise_training", "orin_runtime_validation", "autonomous_motion", "docking"],
+  "media": ["site/assets/robot-patio.webp", "site/assets/patio.webp", "site/assets/prototype.webp"]
+}
