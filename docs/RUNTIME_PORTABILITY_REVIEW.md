@@ -16,9 +16,19 @@ Scope: the rover runtime, not the training pipeline. Supported entrypoint:
 - Configurable ONNX providers with explicit fallback policy; no training
   framework required in the deployment environment.
 - Legacy GPIO executable entrypoints disabled before hardware imports.
-- Ubuntu 22.04 / Python 3.11 runtime CI job added, not dispatched by this review.
+- Ubuntu 22.04 / Python 3.11 runtime CI job added. It was not dispatched during
+  the original review; it later succeeded at `cd0bb2d` as described below.
 
-## Local verification
+## CI reconciliation
+
+CPU CI [run 34710087792](https://github.com/EdwinKestler/caferoomba/actions/runs/34710087792)
+succeeded at `cd0bb2d485831c6b040f933d7ee87ca22b2569f8`. Its Ubuntu
+22.04/Python 3.11 `portable-runtime` job installed the runtime without training
+frameworks, ran the named runtime tests and completed a host simulation. The
+Ubuntu 24.04 full-suite job also succeeded. This confirms CI portability for
+those environments, not ARM64, Orin, TensorRT, cameras, Cube hardware or motion.
+
+## Original local verification
 
 Host: Ubuntu 24.04 x86-64, Python 3.11.15. This is not an Orin result.
 Regression checks passed: 84 tests in the development environment, including

@@ -13,6 +13,8 @@ Explore [This Experiment](EXPERIMENT.md) for the local-notebook → Colab Enterp
 | [Architecture](ARCHITECTURE.md) | Offline teacher, onboard student, interfaces, data flow, and module ownership |
 | [Hardware](HARDWARE.md) | Workstation/Orin distinction, USB/CSI interfaces, and environment isolation |
 | [Runtime](ORIN_COMPANION.md) | Safe bring-up, configuration, and known CLI limitations |
+| [Portable runtime](PORTABLE_RUNTIME.md) | Supported host/Orin composition, USB profiles and fail-closed deployment procedure |
+| [Runtime portability review](RUNTIME_PORTABILITY_REVIEW.md) | Named host, CI and passive-device evidence plus the remaining Orin gates |
 | [Mission state machine](FSM.md) | Public FSM, local integration, and the intended mission lifecycle |
 | [Safety](SAFETY.md) | Motion boundaries, telemetry freshness, turn clearance, and release gates |
 
@@ -21,6 +23,7 @@ Explore [This Experiment](EXPERIMENT.md) for the local-notebook → Colab Enterp
 | Guide | Purpose |
 |---|---|
 | [Dataset contract](DATASET.md) | Demonstrations, causal clips, labels, splits, and private storage |
+| [Real FPV Colab training](COLAB_TRAINING.md) | Reviewed-label preparation, resumable full-data training, evaluation and artifact handoff |
 | [Model card](MODEL_CARD.md) | Student inputs, outputs, learning targets, and current limitations |
 | [Cosmos teacher](DEPLOYMENT_COSMOS_NIM.md) | Integration contract and the distinction between mock and live inference |
 | [Testing](TESTING.md) | Test environments, recorded evidence, regression and hardware gates |

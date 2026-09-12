@@ -9,9 +9,9 @@ is not a label. Do not relabel fixture results as real-data learning.
 Use notebooks 01, 02, then 03, each from the same published implementation
 revision. Set `CAFEROOMBA_REVISION` to its full commit SHA before running the
 bootstrap cell. The cell clones only into a new directory and rejects a dirty
-or different existing checkout. Until these changes are committed and published,
-the notebooks cannot fetch them from GitHub. For local development use the
-Python APIs directly from this checkout.
+or different existing checkout. Use a published revision containing all three
+notebooks and their preflight module. For local development use the Python APIs
+directly from this checkout.
 
 Python 3.11+ and ffmpeg/ffprobe are required. Notebook setup installs `.[cpu,dev]`
 with the active kernel interpreter, preserving already compatible Torch packages.
@@ -37,6 +37,34 @@ workspace/
   dataset-v1/               immutable prepared dataset and manifest
   run-v1/                   checkpoints, metrics, export reports
 ```
+
+## Setup and storage preflight
+
+Before preparing data, each notebook's workspace cell runs an offline setup
+preflight. It checks the pinned clean checkout, active-kernel package location,
+native dependency imports, ffmpeg/ffprobe execution and the explicitly selected
+CPU/CUDA device (CUDA selection performs a tiny tensor operation). It creates
+and removes only its own temporary workspace subdirectory to test file/directory fsync,
+replace/readback and cross-process lock exclusion/release. Existing datasets and
+checkpoints are untouched. No credential is read, package installed, provider
+called or cloud runtime started by the preflight itself.
+
+You can run the same check after bootstrap without running training:
+
+```bash
+python -m caferoomba.learning.readiness \
+  --repo "$CAFEROOMBA_REPO" --workspace "$CAFEROOMBA_WORKSPACE" \
+  --revision "$CAFEROOMBA_REVISION" --device cpu
+```
+
+Save its JSON output with the run's evidence. A successful report deliberately
+sets `restart_persistence_verified=false`: this smoke check cannot establish
+mount durability, distributed locking, crash consistency or survival after a
+runtime is deleted. Separately back up complete dataset/run folders, recreate
+the runtime, restore or remount them, and verify their manifest/checkpoint hashes
+before resume. A local report is not a Colab execution record. Cloud acceptance
+still requires running bootstrap and this check on the selected runtime, then
+actual reviewed-data training, evaluation, export and artifact recovery.
 
 ## Label and timestamp contract
 

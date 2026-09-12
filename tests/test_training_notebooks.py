@@ -16,6 +16,7 @@ def test_notebook_setup_and_code_contract(name):
         assert cell["outputs"] == []
     code = "\n".join("".join(c["source"]) for c in cells)
     assert "CAFEROOMBA_REVISION" in code and "CAFEROOMBA_WORKSPACE" in code
+    assert "check_setup(REPO, WORKSPACE, REPO_REVISION" in code
     assert "build_synthetic_clips" not in code
     assert "NVIDIA_API_KEY" not in code
     if name.startswith("02"):

@@ -26,6 +26,20 @@ def test_build_and_internal_links(tmp_path):
     assert 'prototype' in (out/'index.html').read_text()
 
 
+def test_current_training_and_runtime_guides_are_published(tmp_path):
+    builder=load('build_site'); out=tmp_path/'_site'
+    report=builder.build(ROOT,out)
+    assert report['documents'] >= 26
+    pages = {
+        'colab-training': 'portable-runtime.html',
+        'portable-runtime': 'runtime-portability-review.html',
+        'runtime-portability-review': 'portable-runtime.html',
+    }
+    for slug, linked_page in pages.items():
+        html = (out/'docs'/f'{slug}.html').read_text()
+        assert f'href="{linked_page}"' in html
+
+
 def test_markdown_html_is_not_executable():
     builder=load('build_site')
     content,_=builder.render_document('<script>alert(1)</script>', 'docs/x.md', {})

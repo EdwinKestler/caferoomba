@@ -1,5 +1,25 @@
 # Website publication handover — 2026-09-12 UTC
 
+> **Historical publication handover.** The original handover below describes
+> publication commit `258e785...` and its then-dirty local checkout. It is kept
+> as a point-in-time record; those branch and Project Memory statements are not
+> current instructions.
+
+## Current reconciliation
+
+Published main is now `cd0bb2d485831c6b040f933d7ee87ca22b2569f8`.
+Website [run 34710087793](https://github.com/EdwinKestler/caferoomba/actions/runs/34710087793)
+successfully built, checked and deployed that revision. The repository now also
+contains the Real FPV Colab training, portable runtime and runtime portability
+review guides.
+
+The allowlist/navigation update that exposes those three guides is a later local
+documentation change until it is committed and pushed. A successful local site
+test does not publish it; publication requires a succeeding Pages workflow for
+the resulting revision.
+
+## Original handover
+
 Project website: https://edwinkestler.github.io/caferoomba/
 Documentation library: https://edwinkestler.github.io/caferoomba/docs/index.html
 Published main commit: `258e785bd15277b59be9b86df0891aeb0e4e8eae`.

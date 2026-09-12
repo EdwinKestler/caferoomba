@@ -1,5 +1,23 @@
 # Repository audit
 
+> **Historical audit snapshot.** The tables below record the repository and
+> branch state inspected before the later portable-runtime and full-data
+> learning commits. They are preserved rather than backdated or reclassified.
+> For the reconciled current state, see the section immediately below and
+> [Status and evidence](STATUS.md).
+
+## Current reconciliation — 2026-09-12
+
+| Item | Current evidence |
+|---|---|
+| Published software revision | `cd0bb2d485831c6b040f933d7ee87ca22b2569f8`, including portable-runtime revision `db7caec2f0a2d3ae95a692e65c7dedfddc85933c` |
+| Local integration | `implemented` / `tested_offline`; CPU CI run 34710087792 succeeded in the Ubuntu 22.04/Python 3.11 runtime-only and Ubuntu 24.04 full-suite jobs |
+| Full-data learning | Implementation is `implemented` / `tested_offline` with synthetic/generated inputs; no reviewed owner dataset was trained |
+| Passive USB checks | `tested_on_device` on the x86_64 development host only: RealSense, UVC and Cube telemetry, observation-only and zero commands |
+| Still open | Synchronized/calibrated demonstrations, reviewed labels, current real-data Colab execution, live Cosmos, Orin ARM64/TensorRT, navigation/SITL, physical commands and docking |
+
+## Original inspection snapshot
+
 Evidence states used below: `user_reported`, `implemented`, `tested_offline`,
 `tested_cloud`, `tested_on_device`, `planned`, `blocked`.
 

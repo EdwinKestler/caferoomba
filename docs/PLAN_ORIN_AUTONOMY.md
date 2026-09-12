@@ -1,7 +1,21 @@
 # Plan: Orin Nano companion + Cube Orange Mini + cameras
 
-Status: PR1 **implemented** (`tested_offline` dry-run + fake camera). Later
-PRs remain `planned`. No arming, no pigpio drive, no Jetson PWM.
+> **Historical design plan.** The proposed layout and numbered PR sequence below
+> predate the merged portable runtime and are retained as design history, not as
+> the current roadmap or proof that the target vehicle was deployed.
+
+Current reconciliation (2026-09-12): the composition root, mission/turn FSMs,
+geofence, USB RealSense/UVC adapters, passive Cube observations and configurable
+ONNX execution providers are `implemented` / `tested_offline`. CPU CI run
+34710087792 succeeded at `cd0bb2d`, including the Ubuntu 22.04/Python 3.11
+runtime-only job. Passive USB observations were also performed on the x86_64
+development host, not the Orin. See [Portable runtime](PORTABLE_RUNTIME.md) and
+the [runtime portability review](RUNTIME_PORTABILITY_REVIEW.md).
+
+Still `planned` or `blocked`: native Orin ARM64/TensorRT validation, synchronized
+and calibrated demonstrations, navigation/SITL acceptance, a separately reviewed
+physical command path, supervised motion and docking. No software arming, pigpio
+drive or Jetson PWM was added.
 
 Target vehicle computer: **Jetson Orin Nano, Ubuntu 22.04** (Server/Core
 certified). Companion code in a Python 3.11 `.venv`. Traction/servos stay on
