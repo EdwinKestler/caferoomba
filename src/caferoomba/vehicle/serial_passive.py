@@ -5,9 +5,11 @@ this backend never writes MAVLink bytes, requests streams, arms, changes mode,
 or sends actuator commands. Constructors do not acquire devices.
 """
 from __future__ import annotations
+
 import threading
 import time
 from pathlib import Path
+
 from caferoomba.vehicle.dry_run import DryRunVehicle
 from caferoomba.vehicle.serial_link import SerialLease, resolve_device
 from caferoomba.vehicle.telemetry import TelemetryCache
@@ -46,7 +48,9 @@ class PassiveSerialVehicle(DryRunVehicle):
                                              name="caferoomba-cube", daemon=True)
             self._thread.start()
             if not self.cache.ready.wait(self.config.connect_timeout_s):
-                raise TimeoutError(self.cache.error or "no ArduPilot Rover heartbeat before deadline")
+                raise TimeoutError(
+                    self.cache.error or "no ArduPilot Rover heartbeat before deadline"
+                )
             self._connected = True
         except Exception:
             self.close()

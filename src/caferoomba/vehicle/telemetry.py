@@ -5,8 +5,10 @@ MAVLink raw latitude/longitude are 1e-7 degrees; ATTITUDE yaw is radians
 Raw RC observations are retained, never fabricated into human action labels.
 """
 from __future__ import annotations
+
 import math
 import threading
+
 from caferoomba.vehicle.client import TelemetrySnapshot
 
 
@@ -56,7 +58,9 @@ class TelemetryCache:
             state.vehicle_type, state.autopilot_type = hb[1]["type"], hb[1]["autopilot"]
         fix = data.get("GPS_RAW_INT")
         pos = data.get("GLOBAL_POSITION_INT") or fix
-        if self._fresh(fix, now_ms, self.gps_timeout_ms) and self._fresh(pos, now_ms, self.gps_timeout_ms):
+        gps_ok = self._fresh(fix, now_ms, self.gps_timeout_ms)
+        pos_ok = self._fresh(pos, now_ms, self.gps_timeout_ms)
+        if gps_ok and pos_ok:
             lat, lon = pos[1].get("lat"), pos[1].get("lon")
             if lat is not None and lon is not None:
                 lat, lon = lat / 1e7, lon / 1e7

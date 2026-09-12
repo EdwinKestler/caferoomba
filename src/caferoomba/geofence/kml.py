@@ -101,7 +101,11 @@ def load_kml(path: Path, *, region_name: str | None = None,
         nodes = placemark.xpath(".//k:Polygon", namespaces=NS)
         if not nodes:
             continue
-        name = placemark.findtext("k:name", namespaces=NS) or placemark.get("id") or f"region-{index}"
+        name = (
+            placemark.findtext("k:name", namespaces=NS)
+            or placemark.get("id")
+            or f"region-{index}"
+        )
         if name in features:
             raise ValueError("duplicate region name/id")
         polygons = []

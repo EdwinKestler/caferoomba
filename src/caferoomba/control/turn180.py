@@ -5,6 +5,7 @@ be confirmed externally; a heading reversal alone never completes coverage.
 Timeouts also cover waiting for clearance and next-pass alignment.
 """
 from __future__ import annotations
+
 import math
 from enum import Enum
 

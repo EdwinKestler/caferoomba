@@ -5,6 +5,7 @@ lock. Other programs must not share the port; use a separately configured
 MAVLink router for that architecture. No automatic router/configuration changes.
 """
 from __future__ import annotations
+
 import fcntl
 import hashlib
 from pathlib import Path

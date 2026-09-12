@@ -4,12 +4,14 @@ RGB/IR images and raw metric-scaled depth remain separate. A shadow prediction
 is never relabeled as a human demonstration. No cloud credentials are read.
 """
 from __future__ import annotations
+
 import json
 import queue
 import threading
 from datetime import datetime, timezone
 from pathlib import Path
 from uuid import uuid4
+
 import numpy as np
 from PIL import Image
 
@@ -27,7 +29,9 @@ class RunRecorder:
 
     def open(self):
         self.path.mkdir(parents=True, exist_ok=False)
-        self._thread = threading.Thread(target=self._worker, name="caferoomba-recorder", daemon=True)
+        self._thread = threading.Thread(
+            target=self._worker, name="caferoomba-recorder", daemon=True
+        )
         self._thread.start()
 
     def record(self, row: dict, sample=None):

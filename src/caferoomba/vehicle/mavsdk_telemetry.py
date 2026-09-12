@@ -6,6 +6,7 @@ serial-passive backend. SDK link state is not a measured heartbeat timestamp.
 The SDK-owned process cleanup is isolated to this version-pinned adapter.
 """
 from __future__ import annotations
+
 import asyncio
 import math
 import socket
@@ -14,6 +15,7 @@ import threading
 import time
 from dataclasses import replace
 from pathlib import Path
+
 from caferoomba.vehicle.client import TelemetrySnapshot
 from caferoomba.vehicle.dry_run import DryRunVehicle
 from caferoomba.vehicle.serial_link import SerialLease, resolve_device
@@ -71,7 +73,8 @@ class MavsdkTelemetryVehicle(DryRunVehicle):
                     if value.is_connected:
                         self._ready.set()
                 elif kind == "position":
-                    self._state.latitude_deg, self._state.longitude_deg = value.latitude_deg, value.longitude_deg
+                    self._state.latitude_deg = value.latitude_deg
+                    self._state.longitude_deg = value.longitude_deg
                     self._state.position_t_ms = now
                 elif kind == "gps":
                     self._gps_fix = value.fix_type.value >= 3

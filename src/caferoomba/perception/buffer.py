@@ -4,8 +4,11 @@ A viewpoint/modality switch requires an explicit reset. Large gaps rewarm the
 buffer. Optional fixed-period sampling selects past frames only (never future).
 """
 from __future__ import annotations
+
 from collections import deque
+
 import numpy as np
+
 from caferoomba.perception.camera import FrameSet
 from caferoomba.perception.preprocessing import rgb_tensor
 

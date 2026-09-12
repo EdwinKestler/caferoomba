@@ -1,6 +1,8 @@
 """Synthetic geographic fixtures; never represent a real patio authorization."""
 from zipfile import ZipFile
+
 import pytest
+
 from caferoomba.geofence.fence import Fence
 from caferoomba.geofence.kml import load_kml
 
@@ -23,7 +25,8 @@ HOLE = [(.0004, .0004), (.0006, .0004), (.0006, .0006), (.0004, .0006), (.0004, 
 
 
 def document(content):
-    return '<kml xmlns="http://www.opengis.net/kml/2.2"><Document><Folder>' + content + '</Folder></Document></kml>'
+    ns = "http://www.opengis.net/kml/2.2"
+    return f'<kml xmlns="{ns}"><Document><Folder>{content}</Folder></Document></kml>'
 
 
 def write_map(tmp_path, content=None):

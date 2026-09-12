@@ -1,9 +1,10 @@
 """Hardware-free tests for freshness, camera modality, and explicit shadow mode."""
 import numpy as np
 import pytest
+
 from caferoomba.app.config import CompanionConfig
-from caferoomba.app.loop import CompanionLoop
 from caferoomba.app.fsm import MissionState
+from caferoomba.app.loop import CompanionLoop
 from caferoomba.control.intents import intent_from_policy
 from caferoomba.control.safety import supervise
 from caferoomba.perception.buffer import CausalFrameBuffer
@@ -38,7 +39,9 @@ class DelayedPolicy:
 def test_processing_latency_is_checked_at_dispatch():
     clock, cfg = Clock(), CompanionConfig()
     cfg.camera.frame_count = 1
-    loop = CompanionLoop(cfg, camera=TimedCamera(clock), policy=DelayedPolicy(clock, 500), clock=clock)
+    loop = CompanionLoop(
+        cfg, camera=TimedCamera(clock), policy=DelayedPolicy(clock, 500), clock=clock
+    )
     try:
         loop.start()
         row = loop.cycle()
@@ -91,5 +94,7 @@ def test_missing_explicit_model_fails_loudly(tmp_path):
 
 
 def test_config_rejects_invalid_rate_and_unknown_backend():
-    with pytest.raises(ValueError): CompanionConfig(loop={'hz': -1})
-    with pytest.raises(ValueError): CompanionConfig(camera={'backend': 'typo'})
+    with pytest.raises(ValueError):
+        CompanionConfig(loop={'hz': -1})
+    with pytest.raises(ValueError):
+        CompanionConfig(camera={'backend': 'typo'})

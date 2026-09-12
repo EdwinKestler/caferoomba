@@ -1,5 +1,6 @@
 """Runtime composition root. No module opens hardware as an import side effect."""
 from __future__ import annotations
+
 from caferoomba.app.config import CompanionConfig
 
 

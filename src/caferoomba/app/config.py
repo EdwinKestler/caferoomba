@@ -4,8 +4,10 @@ Native devices are opened explicitly by the runtime, never while parsing YAML.
 Assignments are validated so CLI overrides cannot bypass numeric/type guards.
 """
 from __future__ import annotations
+
 from pathlib import Path
 from typing import Literal
+
 import yaml
 from pydantic import BaseModel, ConfigDict, Field
 

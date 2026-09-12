@@ -4,6 +4,7 @@ Only the worker opens, reads, and closes its native camera. Native reads must
 have deadlines. The runtime polls without waiting for USB or camera exposure.
 """
 from __future__ import annotations
+
 import threading
 
 

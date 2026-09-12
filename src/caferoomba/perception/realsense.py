@@ -4,8 +4,11 @@ Import the SDK in open(), preserve raw Z16 depth and scale. Hardware-clock
 frames disclose host-receipt-only timing; this is not verified capture timing.
 """
 from __future__ import annotations
+
 import time
+
 import numpy as np
+
 from caferoomba.perception.camera import FrameSet
 
 

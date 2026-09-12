@@ -28,6 +28,7 @@ class Fence:
             return
         from pyproj import CRS, Transformer
         from shapely.ops import transform
+
         from caferoomba.geofence.kml import load_kml
 
         region = load_kml(self.path, region_name=self.region_name,

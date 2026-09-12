@@ -5,8 +5,10 @@ is capture time or only a receipt/estimated time. No precision is invented.
 Depth is raw sensor units; depth_scale_m is required to interpret metres.
 """
 from __future__ import annotations
+
 from dataclasses import dataclass
 from typing import Protocol
+
 import numpy as np
 
 

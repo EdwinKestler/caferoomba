@@ -6,10 +6,12 @@ have dedicated workers. Freshness is re-evaluated AFTER inference at dispatch.
 An independent actuator watchdog is still required before enabling real drive.
 """
 from __future__ import annotations
+
 import math
 import time
 from dataclasses import asdict
 from pathlib import Path
+
 from caferoomba.app.bootstrap import apply_overrides as apply_overrides
 from caferoomba.app.bootstrap import build_camera as build_camera
 from caferoomba.app.bootstrap import build_vehicle as build_vehicle
@@ -26,7 +28,9 @@ from caferoomba.schemas import ActionLabel
 
 class CompanionLoop:
     """Composition-based runtime; dependencies/clock can be injected for offline tests."""
-    def __init__(self, config: CompanionConfig, *, camera=None, vehicle=None, policy=None, clock=None):
+    def __init__(
+        self, config: CompanionConfig, *, camera=None, vehicle=None, policy=None, clock=None
+    ):
         self.config = CompanionConfig.model_validate(config.model_dump())
         if config.vehicle.allow_commands:
             raise RuntimeError("vehicle commands are not enabled")
@@ -45,8 +49,12 @@ class CompanionLoop:
         self.buffer = CausalFrameBuffer(frame_count=c.frame_count, size=c.width,
                                        sample_period_ms=c.sample_period_ms,
                                        max_gap_ms=c.max_frame_gap_ms)
-        self.recorder = RunRecorder(Path(config.loop.record_dir),
-                                    save_frames=config.loop.record_frames) if config.loop.record_dir else None
+        record_dir = config.loop.record_dir
+        self.recorder = (
+            RunRecorder(Path(record_dir), save_frames=config.loop.record_frames)
+            if record_dir
+            else None
+        )
         self.cycles = []
         self._last_ms = self._sample = None
         self._started = False
@@ -85,7 +93,8 @@ class CompanionLoop:
             if sample is not None:
                 self._sample = sample
                 self.buffer.push(sample)
-            if self.buffer.ready() and self.fsm.state not in {MissionState.ESTOP, MissionState.FAULT}:
+            blocked = {MissionState.ESTOP, MissionState.FAULT}
+            if self.buffer.ready() and self.fsm.state not in blocked:
                 prediction = self.policy.predict(self.buffer.stack())
                 action = ActionLabel(prediction["action_label"])
                 score = float(prediction["turn180_score"])
@@ -130,7 +139,9 @@ class CompanionLoop:
                 # TURN is supervised, but commands remain logged only.
                 if self.turn.state is TurnState.TURNING:
                     intent.yaw_rate_rad_s = 0.3 * self.turn.direction
-                    intent.action = ActionLabel.LEFT if self.turn.direction > 0 else ActionLabel.RIGHT
+                    intent.action = (
+                        ActionLabel.LEFT if self.turn.direction > 0 else ActionLabel.RIGHT
+                    )
             if self.fsm.requires_zero_velocity():
                 intent = self._stop_intent(now)
         decision = self.vehicle.send_intent(

@@ -5,13 +5,16 @@ cleanup terminates only the child created by this object. Native plugins must
 already be installed on the Jetson. This backend cannot be tested on x86.
 """
 from __future__ import annotations
+
 import os
 import platform
 import select
 import shutil
 import subprocess
 import time
+
 import numpy as np
+
 from caferoomba.perception.camera import FrameSet
 
 
@@ -33,7 +36,8 @@ class Imx219Camera:
             raise RuntimeError("native GStreamer/Argus installation is required")
         command = [executable, "-q", "nvarguscamerasrc", f"sensor-id={self.sensor_id}",
                    "!", f"video/x-raw(memory:NVMM),width=1280,height=720,framerate={self.fps}/1",
-                   "!", "nvvidconv", "!", f"video/x-raw,format=RGBA,width={self.width},height={self.height}",
+                   "!", "nvvidconv", "!",
+                   f"video/x-raw,format=RGBA,width={self.width},height={self.height}",
                    "!", "videoconvert", "!", "video/x-raw,format=RGB", "!",
                    "fdsink", "fd=1", "sync=false"]
         self._process = subprocess.Popen(command, stdout=subprocess.PIPE,

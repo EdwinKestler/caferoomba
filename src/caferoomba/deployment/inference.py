@@ -1,9 +1,12 @@
 """Canonical ONNX policy; no cloud/teacher/training imports or auto downloads."""
 from __future__ import annotations
+
 import hashlib
 import math
 from pathlib import Path
+
 import numpy as np
+
 from caferoomba.schemas import CLASS_ORDER, ActionLabel
 
 
@@ -27,8 +30,10 @@ class OnboardPolicy:
             raise ValueError("unrecognized policy output contract")
 
     def predict(self, frames: np.ndarray) -> dict:
-        if frames.ndim != 5 or any(isinstance(expected, int) and expected != actual
-                                  for expected, actual in zip(self.expected_shape, frames.shape)):
+        shape_pairs = zip(self.expected_shape, frames.shape, strict=False)
+        if frames.ndim != 5 or any(
+            isinstance(expected, int) and expected != actual for expected, actual in shape_pairs
+        ):
             raise ValueError(f"frames must match {self.expected_shape}")
         if not np.isfinite(frames).all() or frames.min() < 0 or frames.max() > 1:
             raise ValueError("frames must be finite normalized RGB")

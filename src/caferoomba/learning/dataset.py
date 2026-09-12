@@ -6,8 +6,8 @@ import numpy as np
 from PIL import Image
 
 from caferoomba.data.clips import assert_causal
-from caferoomba.schemas import CLASS_ORDER, ClipRecord
 from caferoomba.perception.preprocessing import rgb_tensor
+from caferoomba.schemas import CLASS_ORDER, ClipRecord
 
 
 def load_clip_stack(clip: ClipRecord, *, size: int) -> np.ndarray:
