@@ -3,6 +3,10 @@ from zipfile import ZipFile
 
 import pytest
 
+pytest.importorskip("lxml")
+pytest.importorskip("pykml")
+pytest.importorskip("shapely")
+
 from caferoomba.geofence.fence import Fence
 from caferoomba.geofence.kml import load_kml
 

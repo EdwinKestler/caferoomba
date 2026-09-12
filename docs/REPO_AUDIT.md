@@ -28,7 +28,7 @@ Evidence states used below: `user_reported`, `implemented`, `tested_offline`,
 |---|---|
 | `src/caferoomba` causal clips, mock teacher, tiny student, ONNX, dry-run | `implemented` / `tested_offline` after pytest |
 | Live Cosmos (`nvidia/cosmos3-nano-reasoner`) | `blocked` (no `NVIDIA_API_KEY` / teacher URL; spending = 0) |
-| Colab Enterprise training | `blocked` (no project/region/budget approval) |
+| Colab Enterprise training | APIs, billing, IAM, and runtime templates enabled; no job executed |
 | Jetson TensorRT / onboard loop | `blocked` (host is not Jetson) |
 | Cube Orange MAVLink send | `blocked` (adapter disabled; no arming) |
 | Real FPV policy dataset | `blocked` (no authorized FPV files in checkout) |
