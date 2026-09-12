@@ -1,0 +1,61 @@
+{
+  "schema": "caferoomba.public-media.v1",
+  "limit_bytes_per_clip": 9000000,
+  "clips": [
+    {
+      "id": "fpv-sample",
+      "title": "FPV-designated sample",
+      "source_path": "data/raw/fpv/runid001/video-ae5e8a55-14f8-4564-8c6d-2955eef4474a.mp4",
+      "source_sha256": "e6af93be3c431efbf630e0c0055b1b208254d59a55848729f0cd997b80eda4cf",
+      "source_bytes": 30471565,
+      "public_asset": "assets/fpv-sample.mp4",
+      "public_sha256": "60569d71d28d90d368fb239dbf524768387516a459c2940b60d3c104844e01dd",
+      "public_bytes": 2403400,
+      "duration_s": 10.041667,
+      "video": {
+        "codec_name": "h264",
+        "width": 960,
+        "height": 644
+      },
+      "transformation": "Full clip, original playback speed, H.264 web transcode, no audio, metadata removed; original unchanged.",
+      "provenance_note": "Folder designation only; camera mounting and acquisition/generation provenance are unverified.",
+      "is_validated_training_demonstration": false,
+      "autonomy_evidence": false
+    },
+    {
+      "id": "external-sample",
+      "title": "External-view sample",
+      "source_path": "data/raw/external/runid004/grok-video-06d34419-cff8-4579-b487-9695fc3a5375.mp4",
+      "source_sha256": "657c383cca120b7cc2b12270ef5e8107e8f2265cb68f08e1c55e0cd73c5cc28e",
+      "source_bytes": 41855998,
+      "public_asset": "assets/external-sample.mp4",
+      "public_sha256": "746a0aa019b66b0075fd1cb086c1d383b47c83a7d7983d8abeb3ad18d9946a10",
+      "public_bytes": 3531124,
+      "duration_s": 15.041667,
+      "video": {
+        "codec_name": "h264",
+        "width": 960,
+        "height": 644
+      },
+      "transformation": "Full clip, original playback speed, H.264 web transcode, no audio, metadata removed; original unchanged.",
+      "provenance_note": "External viewpoint; acquisition/generation provenance and controller revision are unverified.",
+      "is_validated_training_demonstration": false,
+      "autonomy_evidence": false
+    }
+  ],
+  "encoding": {
+    "container": "MP4",
+    "video_codec": "H.264 libx264",
+    "pixel_format": "yuv420p",
+    "width": 960,
+    "height": 644,
+    "fps": 24,
+    "crf": 24,
+    "maxrate": "1800k",
+    "bufsize": "3600k",
+    "audio": false,
+    "metadata_stripped": true,
+    "faststart": true,
+    "speed_changed": false
+  }
+}

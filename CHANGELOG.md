@@ -1,5 +1,9 @@
 # Changelog
 
+## Website experiment and media — 2026-09-12
+
+Add two looping, muted dataset previews (2.40 MB and 3.53 MB), exact Colab-inclusive architecture and Physical AI lifecycle illustrations, a locally designed notebook/cloud-compute experiment guide, motion preferences, media provenance hashes and strict video publication checks. No robot source, cloud training, or hardware actuation changes.
+
 ## Documentation and website — 2026-09-12 UTC
 
 - Add a static GitHub Pages project site with curated owner-provided prototype stills, an architecture overview, evidence/status boundary, and a browsable documentation library.

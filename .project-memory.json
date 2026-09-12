@@ -25,7 +25,12 @@
     "project_memory/**/*.md",
     "project_memory/schemas/**/*.json",
     ".agents/skills/**/SKILL.md",
-    ".grok/skills/**/SKILL.md"
+    ".grok/skills/**/SKILL.md",
+    "site/**/*.html",
+    "site/**/*.css",
+    "site/**/*.js",
+    "site/documents.json",
+    "site/media.json"
   ],
   "exclude_directories": [
     ".caferoomba",

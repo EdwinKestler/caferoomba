@@ -64,3 +64,9 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md), [SAFETY.md](docs/SAFETY.md), and [SECUR
 Original **GNU Affero General Public License, version 3** text is preserved in [LICENSE](LICENSE). Model weights, SDKs, dependencies, and contributed media retain their respective terms. Project media supplied by Edwin Kestler is identified in [MEDIA.md](docs/MEDIA.md).
 
 Independent project. NVIDIA and Google Cloud names describe technology and community-learning context; no endorsement, award, or production certification is claimed.
+
+## This Experiment
+
+[Explore the experiment](https://edwinkestler.github.io/caferoomba/#experiment), [watch the two looping dataset previews](https://edwinkestler.github.io/caferoomba/#data-clips), and read [the local-notebook / Colab Enterprise workflow](docs/EXPERIMENT.md). Both public clip derivatives are below 9 MB; originals remain unchanged.
+
+Human demonstration → FPV video → **Google Cloud Colab Enterprise** → Cosmos physical reasoning → lightweight learned navigation policy → NVIDIA Jetson → Cube Orange → robot motion. This is the proposed architecture; cloud execution and field validation are separate milestones.

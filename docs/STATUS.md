@@ -2,7 +2,7 @@
 
 **Reviewed public baseline:** `eb9a2a427098b8f973d50b09906a9c75cb87a4a8` (2026-09-11).
 
-**Documentation review:** 2026-09-12 UTC. This update publishes a website and documentation only. Uncommitted runtime changes on `feat/orin-shadow-integration` remain separate from public `main`.
+**Documentation review:** 2026-09-12 UTC. This update publishes a website and documentation only. The Orin shadow integration was subsequently merged into main at `28c5ac1`; the media/experiment update starts from `c056adc`. The older baseline columns below are retained as historical comparisons, not a description of an unmerged current branch.
 
 ## Capability matrix
 
@@ -39,3 +39,7 @@ Synthetic examples must retain `is_synthetic=true`; mock annotations must retain
 ## Sources of truth
 
 Public code at the pinned revision; the CI run linked above; `docs/LOCAL_INTEGRATION_STATUS.md`; `docs/evidence/manifest.json` (historical record); and `docs/evidence/publication.json` (publication-level summary). Preserve historical records rather than changing their timestamps or reclassifying their runs.
+
+## Media and experiment update
+
+Two web-encoded dataset previews and two conceptual flow illustrations explain the proposed cloud-to-edge experiment. Public media is not a new hardware trial. The site now describes locally authored notebooks and the intended Colab Enterprise compute advantage; it does not claim a completed Colab/Cosmos run. The FPV-designated sample requires viewpoint and origin validation. See [This Experiment](EXPERIMENT.md) and [Media](MEDIA.md).

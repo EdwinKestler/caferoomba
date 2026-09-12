@@ -63,3 +63,7 @@ data/raw/**
 
 # Disposable static website output (source is site/ and allowlisted Markdown)
 /_site/
+
+# Explicit owner-approved public web previews; raw originals remain ignored.
+!/site/assets/fpv-sample.mp4
+!/site/assets/external-sample.mp4

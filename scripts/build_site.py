@@ -18,7 +18,7 @@ from markdown_it import MarkdownIt
 
 REPO = 'https://github.com/EdwinKestler/caferoomba'
 PUBLIC_URL = 'https://edwinkestler.github.io/caferoomba/'
-ASSETS = ('style.css', 'site.js', 'favicon.svg', 'robot-patio.webp', 'patio.webp', 'prototype.webp')
+ASSETS = ('style.css', 'site.js', 'favicon.svg', 'robot-patio.webp', 'patio.webp', 'prototype.webp', 'fpv-sample.mp4', 'external-sample.mp4', 'fpv-sample-poster.webp', 'external-sample-poster.webp', 'training-pipeline.svg', 'physical-ai-cycle.svg')
 
 
 def slug(text: str) -> str:
@@ -58,6 +58,10 @@ def render_document(text: str, source: str, mapping: dict[str, str]) -> tuple[st
             if token.tag == 'h2':
                 toc.append((identity, title))
         for child in token.children or []:
+            if child.type == 'image':
+                target = resolve_source(source, child.attrGet('src') or '')
+                if target.startswith('site/assets/') and target.removeprefix('site/assets/') in ASSETS:
+                    child.attrSet('src', '../assets/' + target.removeprefix('site/assets/'))
             if child.type != 'link_open':
                 continue
             href = child.attrGet('href') or ''
@@ -109,6 +113,17 @@ def build(root: Path, output: Path) -> dict:
         shutil.rmtree(output)
     (output / 'assets').mkdir(parents=True)
     (output / 'docs').mkdir()
+    media = json.loads((root / 'site/media.json').read_text())
+    import hashlib
+    video_names = {'fpv-sample.mp4', 'external-sample.mp4'}
+    if {Path(c['public_asset']).name for c in media['clips']} != video_names or len(media['clips']) != 2:
+        raise ValueError('Public video allowlist mismatch')
+    for clip in media['clips']:
+        source = root / 'site/assets' / Path(clip['public_asset']).name
+        if source.is_symlink() or source.stat().st_size >= 9_000_000:
+            raise ValueError('Video must be a regular file below 9 MB')
+        if hashlib.sha256(source.read_bytes()).hexdigest() != clip['public_sha256']:
+            raise ValueError('Video hash differs from publication manifest')
     copied=[]
     for name in ASSETS:
         source = root / 'site/assets' / name
@@ -116,6 +131,7 @@ def build(root: Path, output: Path) -> dict:
             raise ValueError(f'Missing or symlink public asset: {name}')
         shutil.copyfile(source, output / 'assets' / name)
         copied.append('assets/' + name)
+    shutil.copyfile(root / 'site/media.json', output / 'assets/media.json')
     shutil.copyfile(root / 'site/index.html', output / 'index.html')
     for spec in specs:
         source = (root / spec['source']).resolve()

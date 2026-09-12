@@ -2,6 +2,8 @@
 
 CafeRoomba is an open-source coffee-drying-patio robotics project by Edwin Kestler. Start with the evidence boundary before connecting equipment.
 
+Explore [This Experiment](EXPERIMENT.md) for the local-notebook → Colab Enterprise → onboard policy workflow and the role of cloud compute for a GPU-constrained project.
+
 ## Start here
 
 | Guide | Purpose |

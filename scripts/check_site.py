@@ -21,7 +21,8 @@ class Page(HTMLParser):
             if a['id'] in self.ids: self.duplicates.append(a['id'])
             self.ids.add(a['id'])
         if tag=='a' and a.get('href'): self.refs.append(a['href'])
-        if tag in ('img','script') and a.get('src'): self.refs.append(a['src'])
+        if tag in ('img','script','source','video') and a.get('src'): self.refs.append(a['src'])
+        if tag=='video' and a.get('poster'): self.refs.append(a['poster'])
         if tag=='link' and a.get('rel') in ('stylesheet','icon') and a.get('href'): self.refs.append(a['href'])
 
 
@@ -44,8 +45,12 @@ def check(root: Path) -> dict:
                 errors.append(f'{path.relative_to(root)} -> missing/escaping {ref}'); continue
             if u.fragment and target.suffix=='.html' and unquote(u.fragment) not in pages[target].ids:
                 errors.append(f'{path.relative_to(root)} -> missing fragment {ref}')
+    allowed_videos = {'assets/fpv-sample.mp4', 'assets/external-sample.mp4'}
+    for path in root.rglob('*.mp4'):
+        if str(path.relative_to(root)) not in allowed_videos or path.stat().st_size >= 9_000_000:
+            errors.append('Unapproved/oversize video: '+str(path.relative_to(root)))
     for path in root.rglob('*'):
-        if path.is_file() and (path.is_symlink() or path.suffix in {'.py','.env','.sqlite3','.pt','.onnx','.mp4','.pem','.key'}):
+        if path.is_file() and (path.is_symlink() or path.suffix in {'.py','.env','.sqlite3','.pt','.onnx','.pem','.key'}):
             errors.append('Forbidden published file: '+str(path.relative_to(root)))
     report={'html_pages':len(pages),'local_references_checked':links,'errors':errors}
     if errors: raise ValueError(json.dumps(report,indent=2))

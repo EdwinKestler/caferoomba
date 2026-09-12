@@ -50,3 +50,11 @@ The public live-teacher function deliberately refuses execution, and teacher ann
 ## Design references
 
 [ArduPilot Rover GUIDED commands](https://ardupilot.org/dev/docs/mavlink-rover-commands.html), [KML coordinate specification](https://developers.google.com/kml/documentation/kmlreference), [pyproj Transformer](https://pyproj4.github.io/pyproj/stable/api/transformer.html). Verify message and native-library compatibility on the installed firmware/software versions before enabling a hardware adapter.
+
+## Cloud-to-robot experiment
+
+Human demonstration → FPV video → **Google Cloud Colab Enterprise** → Cosmos physical reasoning → lightweight learned navigation policy → NVIDIA Jetson → Cube Orange → robot motion.
+
+Colab is the proposed notebook/compute environment; teacher hosting is sized independently and is not part of real-time steering. [Read the experiment](EXPERIMENT.md).
+
+![Proposed architecture](../site/assets/training-pipeline.svg)

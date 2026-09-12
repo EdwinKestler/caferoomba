@@ -1,0 +1,55 @@
+{
+  "schema": "caferoomba.website-update.v1",
+  "recorded_at": "2026-09-12T02:51:58.403800+00:00",
+  "base_commit": "c056adcda441facc7dc8f95e09acb62dec5ecc41",
+  "scope": "Website/docs only; no robot source changes",
+  "publication_tests_passed": 7,
+  "html_pages": 25,
+  "internal_references_checked": 1004,
+  "public_video_count": 2,
+  "public_video_total_bytes": 5934524,
+  "max_bytes_per_video": 9000000,
+  "browser_checks": [
+    {
+      "viewport": "desktop",
+      "homepage_no_overflow": true,
+      "docs_no_overflow": true,
+      "all_images_loaded": true,
+      "javascript_errors": [],
+      "verified_loop_playback": [
+        {
+          "id": "fpv-preview",
+          "time": 7.088669,
+          "duration": 10.041667,
+          "paused": false,
+          "loops": 1,
+          "ready": 4,
+          "error": null
+        },
+        {
+          "id": "external-preview",
+          "time": 2.08995,
+          "duration": 15.041667,
+          "paused": false,
+          "loops": 1,
+          "ready": 4,
+          "error": null
+        }
+      ],
+      "reduced_motion_pause_verified": true
+    },
+    {
+      "viewport": "mobile",
+      "homepage_no_overflow": true,
+      "docs_no_overflow": true,
+      "all_images_loaded": true,
+      "javascript_errors": [],
+      "verified_loop_playback": [],
+      "reduced_motion_pause_verified": false
+    }
+  ],
+  "no_cloud_training_executed": true,
+  "no_hardware_commands": true,
+  "raw_originals_unchanged": true,
+  "live_deployment_status": "Verify GitHub Pages workflow for the resulting commit"
+}
