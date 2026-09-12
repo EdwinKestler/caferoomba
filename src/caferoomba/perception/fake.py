@@ -33,6 +33,8 @@ class FakeCamera:
             color=frame,
             t_ms=int(time.monotonic() * 1000),
             source=self.name,
+            frame_id=self._index,
+            is_synthetic=True,
         )
 
     def close(self) -> None:

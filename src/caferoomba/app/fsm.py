@@ -33,6 +33,8 @@ class MissionEvent(str, Enum):
     FAULT = "FAULT"
     OPERATOR_STOP = "OPERATOR_STOP"
     RESET = "RESET"
+    HOLD_REQUEST = "HOLD_REQUEST"
+    HOME_ARRIVED = "HOME_ARRIVED"
 
 
 class IllegalTransition(ValueError):
@@ -67,6 +69,10 @@ TRANSITIONS: dict[tuple[MissionState, MissionEvent], MissionState] = {
     (MissionState.FAULT, MissionEvent.OPERATOR_STOP): MissionState.ESTOP,
     (MissionState.ESTOP, MissionEvent.RESET): MissionState.OFF,
 }
+
+for _state in (MissionState.SWEEP, MissionState.TURN, MissionState.RETURN):
+    TRANSITIONS[(_state, MissionEvent.HOLD_REQUEST)] = MissionState.HOLD
+TRANSITIONS[(MissionState.RETURN, MissionEvent.HOME_ARRIVED)] = MissionState.IDLE
 
 ZERO_VELOCITY_STATES = frozenset(
     {
